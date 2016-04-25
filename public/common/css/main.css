@@ -1,0 +1,164 @@
+html,
+body,
+th,
+a {
+	margin: 0;
+	padding: 0;
+    text-decoration: none;
+}
+
+body {
+	font: 16px 'Helvetica Neue', Helvetica, Arial;
+	font-weight: 300;
+	line-height: 1.5;
+	width: auto;
+	background: #ffffff;
+	color: #353535;
+	font-smoothing: antialiased;
+}
+
+ul#lista-contactos {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    background: #fff;
+    width: 100%;
+}
+
+ul#lista-contactos li {
+    list-style: none;
+    border-bottom: 1px solid #eee;
+    display: block;
+    padding: 0;
+}
+
+.cabecera-lista{
+    padding: 10px;
+    display: block;
+    border: 1px solid #E3E3E3;
+}
+
+.cabecera-lista:hover,
+.cabecera-lista:hover * {
+    background: #7893AB;
+    color: #fff;
+}
+
+.cabecera-lista .activo {
+    background: #7893AB;
+    /*background: #447BAB;*/
+    color: #fff;
+}
+
+.detalles {
+    display: none;
+    background: #E6E6E6;
+    padding: 0px;
+    font-size: 0.9em;
+}
+
+.seleccionado,
+.seleccionado * {
+    font: 16px 'Helvetica Neue', Helvetica, Arial;
+	font-weight: 300;
+	line-height: 1.5;
+	width: 1;
+    color: #FFFFFF;
+    background: #7893AB;
+}
+
+.img-rounded {
+    margin-left: 25px;
+    margin-top: 10px;
+    width: 180px;
+    height: 220px;
+    border: 1px solid #4C4949;
+}
+
+.img-responsive {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #E1E1E1;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.logo {
+    padding: 0px;
+    width: 180px;
+}
+
+.navbar {
+    background: #FFFFFF;
+}
+
+.ficha {
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.ficha-foto {
+    margin: 10px;
+    padding: 20px;
+}
+
+.foto-miniatura {
+    width: 25px;
+    height: 30px;
+    border: 1px solid #E1E1E1;
+}
+
+.ficha-detalle {
+    padding: 20px;
+    margin-left: 40px;
+}
+
+.mostrar-detalles {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #000;
+    cursor: pointer;
+}
+
+.cabecera-color {
+    background-color: #E3E3E3;
+    font-size: 18px;
+}
+
+.oculto {
+    display: none;
+}
+
+.tituloLista {
+    margin-bottom: 20px;
+    background-color: #3D3D3D;
+    color: #FFFFFF;
+    font: 20px arial, sans-serif;
+}
+
+.registroLista {
+    margin-bottom: 10px;
+}
+
+.c-list {
+    padding: 0px;
+    min-height: 44px;
+}
+
+.title {
+    font-size: 1.0em;
+    font-weight: bold;
+    padding: 5px 15px;
+}
+
+
+.list-group-item {
+    height: 60px;
+    padding: 10px;
+}
+
+.formSuperior {
+    padding: 20px;
+}
