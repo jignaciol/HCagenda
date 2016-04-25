@@ -4,6 +4,8 @@ contacts.views.empleado_view = Backbone.View.extend({
 
     tagName : "li",
 
+    className: "contactItem",
+
     events: {
         "click .mostrar-detalles": "mostrarDetalles"
     },
@@ -17,14 +19,14 @@ contacts.views.empleado_view = Backbone.View.extend({
         if(req.status == 200){
             return url;
         } else {
-            return 'static/common/img/default.jpg';
+            return "public/common/img/default.jpg";
         }
 
     },
 
     render: function() {
-        this.url_test = 'static/common/img/fotos-empleados/F00' + this.model.get('ficha') + '.jpg';
-        this.url_tested = this.checkImgUrl(this.url_test);
+        this.url_test = "fotos/F00" + this.model.get("ficha") + '.jpg';
+        this.url_tested = contacts.utils.checkImgUrl(this.url_test);
 
         /* Agrego una variable url_tested al modelo */
         this.model.set({url_tested: this.url_tested});

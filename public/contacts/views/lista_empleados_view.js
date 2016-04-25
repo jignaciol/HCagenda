@@ -5,7 +5,6 @@ contacts.views.lista_empleados_view = Backbone.View.extend({
    el: $("#listaContactos"),
 
    render_empleado: function(empleado){
-       console.log("instanciando vista")
         var empleado_view = new contacts.views.empleado_view({
             model: empleado
         });
@@ -21,7 +20,7 @@ contacts.views.lista_empleados_view = Backbone.View.extend({
    },
 
    renderFilter: function(cfiltered){
-        this.$el.html('');
+        this.$el.html("");
         self = this;
         cfiltered.forEach(function(empleado){
             self.render_empleado(empleado);

@@ -5,6 +5,7 @@ contacts = {
     collections: {},
     routers: {},
     events: _.extend({}, Backbone.Events),
+    utils: {},
 
 }
 

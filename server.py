@@ -35,6 +35,12 @@ def json_get(name):
     return bottle.request.json.get(name)
 
 
+@bottle.route("/fotos/<filename:path>")
+def static_images(filename):
+    """ Funcion que busca las imagenes de los empleados """
+    return bottle.static_file(filename, root="../Fotos")
+
+
 @bottle.route("/public/<filename:path>")
 def static(filename):
     """ Funcion que devuelve los archivos estaticos """
