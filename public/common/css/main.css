@@ -163,65 +163,11 @@ ul#listaContactos li {
     padding: 20px;
 }
 
-
-.span.round-tabs {
-    width: 70px;
-    height: 70px;
-    line-height: 70px;
-    display: inline-block;
-    border-radius: 100px;
-    background: white;
-    z-index: 2;
-    position: absolute;
-    left: 0;
-    text-align: center;
-    font-size: 25px;
+.loading {
+    background: "public/common/img/loading.gif" 50% no-repeat;
 }
 
-.span.round-tabs.one {
-    color: rgb(34, 34, 34);
-    border: 2px solid rgb(34, 34, 34);
-}
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    color: #555555;
-    cursor: default;
-    /* background-color: #ffffff; */
-    border: 0;
-    border-bottom-color: transparent;
-}
 
-li.active span.round-tabs.one{
-    background: #fff !important;
-    border: 2px solid #ddd;
-    color: rgb(34, 34, 34);
-}
 
-span.round-tabs.two{
-    color: #febe29;border: 2px solid #febe29;
-}
 
-li.active span.round-tabs.two{
-    background: #fff !important;
-    border: 2px solid #ddd;
-    color: #d3d3d3;
-}
-
-.nav-tabs > li.active > a span.round-tabs{
-        background: #fafafa;
-    }
-    .nav-tabs > li {
-            width: 20%;
-        }
-
-.nav-tabs > li a{
-       width: 70px;
-          height: 70px;
-             margin: 20px auto;
-                border-radius: 100%;
-                   padding: 0;
-               }
-
-               .nav-tabs > li a:hover{
-                       background: transparent;
-                   }

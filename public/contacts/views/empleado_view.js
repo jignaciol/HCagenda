@@ -12,21 +12,9 @@ contacts.views.empleado_view = Backbone.View.extend({
 
     template: _.template( $("#empleado-template").html() ),
 
-    checkImgUrl: function(url){
-        var req = new XMLHttpRequest();
-        req.open('GET', url, false);
-        req.send();
-        if(req.status == 200){
-            return url;
-        } else {
-            return "public/common/img/default.jpg";
-        }
-
-    },
-
     render: function() {
-        this.url_test = "fotos/F00" + this.model.get("ficha") + '.jpg';
-        this.url_tested = contacts.utils.checkImgUrl(this.url_test);
+        //this.url = "fotos/F00" + this.model.get("ficha") + '.jpg';
+        this.url_tested = contacts.utils.checkImgUrl(this.model.get("ficha"));
 
         /* Agrego una variable url_tested al modelo */
         this.model.set({url_tested: this.url_tested});
