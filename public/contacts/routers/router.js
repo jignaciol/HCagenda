@@ -7,9 +7,9 @@ contacts.routers.ContactsRouter = Backbone.Router.extend({
     },
 
     index: function() {
-        var gEvent = _.extend({}, Backbone.Events);
+        this.search = new contacts.models.search()
 
-        new contacts.views.top_bar_view({gEvent: gEvent})
-        new contacts.views.lista_empleados_view({gEvent: gEvent})
+        var topBar = new contacts.views.top_bar_view({model: this.search})
+        var listaEmpleado = new contacts.views.listaEmpleadosView({ el: $("#listaContactos"), model: this.search})
     }
 })

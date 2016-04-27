@@ -21,23 +21,15 @@
                 <a class="" href="#"><img class="logo" src="public/common/img/Logosmall.bmp" alt=""></a>
             </div>
             <div class="collapse navbar-collapse" id="barra-menu">
-                <!--
-                <ul class="nav navbar-nav navbar-right">
+                <!-- Inicio seccion de login -->
+                <ul id="navlogin" class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle=""
-                           role="button" aria-haspopup="true" aria-expanded="false">
-                           Ingresar&nbsp;<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Registrarse</a></li>
-                            <li><a href="#">opcion A</a></li>
-                            <li><a href="#">Opcion B</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                        </ul>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Iniciar sesi&oacute;n</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu"></ul>
                     </li>
                 </ul>
-                -->
+                <!-- Fin de menu de login -->
+
                 <form class="navbar-form navbar-right" role="search">
                     <div class="input-group col-sm-12">
                         <input id="searchBox" type="text" class="form-control input-md  " placeholder="Buscar">
@@ -121,9 +113,33 @@
     </br></br>
 
 
-
-
-
+    <!-- template de login -->
+    <script id="formLogin" type="text/template">
+            <li>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form" role="form" method="post" action="/" accept-charset="UTF-8" id="login-nav">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                    <input id="user" type="text" class="form-control" name="email" value="" placeholder="Ingrese su correo">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input id="user" type="text" class="form-control" name="user" value="" placeholder="Ingrese su contraseña">
+                                </div>
+                            </div>
+                            <br/><br/>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+    </script>
 
 
     <!-- templates para el directorio -->
@@ -264,6 +280,7 @@
     <script src="public/common/js/models/departamento.js" type="text/javascript"></script>
     <script src="public/common/js/models/area.js" type='text/javascript'></script>
     <script src="public/common/js/models/tipoArea.js" type='text/javascript'></script>
+    <script src="public/common/js/models/search.js" type="text/javascript"></script>
 
     <!-- colecciones del sistema -->
     <script src="public/contacts/collections/lista_empleados.js" type="text/javascript"></script>
@@ -274,6 +291,8 @@
     <script src="public/contacts/views/empleado_view.js" type="text/javascript"></script>
     <script src="public/contacts/views/lista_empleados_view.js" type="text/javascript"></script>
 
+        <!-- login form -->
+    <script src="public/common/js/views/formLogin.js" type="text/javascript"></script>
         <!-- top bar -->
     <script src="public/contacts/views/top_bar_view.js" type="text/javascript"></script>
 

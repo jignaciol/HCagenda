@@ -5,11 +5,12 @@ contacts.views.top_bar_view = Backbone.View.extend({
     el: "#navbar",
 
     keyupRead: function() {
-        this.gevent.trigger("leerPalabraFor");
+        this.model.set({word: this.$("#searchBox").val()})
+        this.model.save()
     },
 
-    initialize: function(options) {
-       this.gevent = options.gEvent;
+    initialize: function() {
+       new contacts.views.formLoginView( {el: this.$("#login-dp")})
     },
 
     events: {

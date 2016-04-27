@@ -1,8 +1,6 @@
 var contacts = contacts || {};
 
-contacts.views.lista_empleados_view = Backbone.View.extend({
-
-   el: $("#listaContactos"),
+contacts.views.listaEmpleadosView = Backbone.View.extend({
 
    render_empleado: function(empleado){
         var empleado_view = new contacts.views.empleado_view({
@@ -31,17 +29,15 @@ contacts.views.lista_empleados_view = Backbone.View.extend({
        self = this;
        this.collection.fetch({
            success: function() {
-               var filterWord = $("#searchBox").val();
-               var cfiltered = self.collection.searchByName(filterWord);
-               self.renderFilter(cfiltered);
+               var filterWord = self.model.get("word")
+               var cfiltered = self.collection.searchByName(filterWord)
+               self.renderFilter(cfiltered)
             }
        });
    },
 
-   initialize: function(options) {
-       this.gevent = options.gEvent;
-       _.bindAll(this, "leerPalabraFor");
-       this.gevent.bind("leerPalabraFor", this.leerPalabraFor);
+   initialize: function() {
+       this.model.on("change", this.leerPalabraFor, this)
 
        self = this;
        this.collection = new contacts.collections.lista_empleados();
