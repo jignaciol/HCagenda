@@ -254,6 +254,7 @@ def login_form():
 def login():
     """Authenticate users"""
     username = post_get('username')
+
     password = post_get('password')
     aaa.login(username, password, success_redirect='/osticket/sms', fail_redirect='/')
 

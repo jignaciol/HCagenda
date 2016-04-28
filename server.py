@@ -7,6 +7,7 @@ import bottle
 import psycopg2
 import json
 import datetime
+import cork_server
 from constants import BDP_IP, BDP_PORT, BDP_DBNAME, BDP_USER, BDP_PASSWORD
 from constants import BTL_HOST, BTL_PORT
 
@@ -25,6 +26,12 @@ OP_STATUS = {'status': 0, 'message': ''}
 # herramientas
 
 
+b = cork_server.populate_backend()
+corkServer = cork_server.Cork(backend=b, email_sender="", smtp_url="")
+
+SERVER = cork_server.SessionMiddleware(SERVER, cork_server.session_opts)
+
+
 def post_get(name):
     """Funcion que devuelve el valor de una variable enviada por POST """
     return bottle.request.forms.get(name)
@@ -33,6 +40,17 @@ def post_get(name):
 def json_get(name):
     """Funcion para capturar valores enviados por json"""
     return bottle.request.json.get(name)
+
+
+def json_full():
+    """ Funcion que devuelve todo el json enviado por POST """
+    return bottle.request.json()
+
+
+@bottle.error(404)
+@bottle.error(400)
+def error500(error):
+    return bottle.static_file("contacts/template/error.html", root="public/")
 
 
 @bottle.route("/fotos/<filename:path>")
@@ -318,7 +336,7 @@ def borrar_empleadoextension(id=0):
 @bottle.route('/tipo_area/', method='GET')
 def listar_tipoarea():
     """ listar todos: tipoarea """
-
+    corkServer.require(fail_redirect="/")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -339,6 +357,7 @@ def listar_tipoarea():
 @bottle.route('/tipo_area/:id', method='GET')
 def listar_tipoarea_id(id):
     """ listar id:  tipoarea """
+    corkServer.require(fail_redirect="/")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()

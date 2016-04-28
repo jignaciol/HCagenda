@@ -28,7 +28,21 @@ contacts.views.empleado_view = Backbone.View.extend({
         $(e.target).parent().parent().parent().find('.detalles').slideToggle('fast');
     },
 
+    dispose: function() {
+
+        // same as this.$el.remove()
+        this.remove()
+
+        // unbind events that are set on this view
+        this.off()
+
+        // remove all models bindings made by this view
+        this.model.off( null, null, this)
+
+    },
+
     initialize: function() {
         this.render();
     }
+
 });
