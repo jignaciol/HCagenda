@@ -2,9 +2,9 @@ var contacts = contacts || {};
 
 contacts.models.empleado = Backbone.RelationalModel.extend({
 
-    urlRoot: 'empleado/',
+    urlRoot: "empleado/",
 
-    idAttribute: 'id_empleado',
+    idAttribute: "id_empleado",
 
     defaults: {
         ficha: '',

@@ -65,16 +65,45 @@ def static(filename):
     return bottle.static_file(filename, root="public/")
 
 
+# punto de inicio de la app #
 @bottle.route("/", method="GET")
 def index():
     """ Funcion que devuelve solo el index del directorio """
     return bottle.static_file("contacts/template/index.html", root="public/")
 
 
-# RUTAS PARA MODELO EMPLEADO #
+# consulta de lista de contactos #
+
+@bottle.route("/extensions/", method="GET")
+def listar_extensions():
+    """ Funcion que se encarga de listar todas las extensiones existentes
+        con el departamento al que pertenecen """
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT  ext.id, ext.numero, ext.modelo,
+                        ext.id_departamento, d.descripcion
+                FROM "Agenda"."Extension" ext
+                LEFT JOIN "Agenda".departamento d ON d.id = ext.id_departamento
+              """
+
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route('/empleado/', method='GET')
+# consulta de lista de empleados con su extension asignada #
+
+@bottle.route("/empleado/", method="GET")
 def listar_empleados():
     """ funcion que lista todos los empleados dentro de la base de datos
         de contactos """
@@ -114,7 +143,9 @@ def listar_empleados():
     return json_result
 
 
-@bottle.route('/empleado/:id', method='GET')
+# funciones API RESTFULL #
+
+@bottle.route("api/empleado/:id", method="GET")
 def listar_empleado_id(id=0):
     """ funcion que lista un empleados dentro de la base de datos de contactos segun el id indicado """
 
@@ -153,19 +184,19 @@ def listar_empleado_id(id=0):
     return json_result
 
 
-@bottle.route('/empleado/', method='POST')
+@bottle.route("api/empleado/", method="POST")
 def agregar_empleado():
     """ funcion para agregar un empleado a la base de datos """
     pass
 
 
-@bottle.route('/empleado/:id', method='PUT')
+@bottle.route("api/empleado/:id", method="PUT")
 def actualizar_empleado(id=0):
     """ funcion para actualizar los datos de un empleado en la base de datos """
     pass
 
 
-@bottle.route('/empleado/:id', method='DELETE')
+@bottle.route("api/empleado/:id", method="DELETE")
 def borrar_empleado(id=0):
     """ funcion para borrar un empleado en la base de datos """
     pass
@@ -173,31 +204,31 @@ def borrar_empleado(id=0):
 # CODIGO PARA MODELO AREA #
 
 
-@bottle.route('/area/', method='GET')
+@bottle.route("api/area/", method="GET")
 def listar_areas():
     """ funcion para listar todas las areas """
     pass
 
 
-@bottle.route('/area/:id', method='GET')
+@bottle.route("api/area/:id", method="GET")
 def listar_area_id(id):
     """ funcion para listar un area segun el id enviado """
     pass
 
 
-@bottle.route('/area/', method='POST')
+@bottle.route("api/area/", method="POST")
 def agregar_area():
     """ funcion para agregar un empleado a la base de datos """
     pass
 
 
-@bottle.route('/area/:id', method='PUT')
+@bottle.route("api/area/:id", method="PUT")
 def actualizar_area(id=0):
     """ funcion para actualizar los datos de un area en la base de datos """
     pass
 
 
-@bottle.route('/area/:id', method='DELETE')
+@bottle.route("api/area/:id", method="DELETE")
 def borrar_area(id=0):
     """ funcion para borrar un empleado en la base de datos """
     pass
@@ -205,31 +236,31 @@ def borrar_area(id=0):
 # CODIGO PARA MODELO EXTENSION #
 
 
-@bottle.route('/extension/', method='GET')
+@bottle.route("api/extension/", method="GET")
 def listar_extensiones():
     """ funcion para listar todas los registros de las extensiones """
     pass
 
 
-@bottle.route('/extension/:id', method='GET')
+@bottle.route("api/extension/:id", method="GET")
 def listar_extension_id(id):
     """ funcion para listar una extension segun el id enviado """
     pass
 
 
-@bottle.route('/extension/', method='POST')
+@bottle.route("api/extension/", method="POST")
 def agregar_extension():
     """ funcion para agregar una extension a la base de datos """
     pass
 
 
-@bottle.route('/extension/:id', method='PUT')
+@bottle.route("api/extension/:id", method="PUT")
 def actualizar_extension(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
     pass
 
 
-@bottle.route('/extension/:id', method='DELETE')
+@bottle.route("api/extension/:id", method="DELETE")
 def borrar_extension(id=0):
     """ funcion para borrar una extension en la base de datos """
     pass
@@ -237,63 +268,63 @@ def borrar_extension(id=0):
 # CODIGO PARA MODELO DATOS DE CONTACTO #
 
 
-@bottle.route('/datoscontacto/', method='GET')
+@bottle.route("api/datoscontacto/", method="GET")
 def listar_datosContacto():
     """ funcion para listar todas los registros de los datos de contacto """
     pass
 
 
-@bottle.route('/datoscontacto/:id', method='GET')
+@bottle.route("api/datoscontacto/:id", method="GET")
 def listar_datoscontacto_id(id):
     """ funcion para listar datoscontacto segun el id enviado """
     pass
 
 
-@bottle.route('/extension/', method='POST')
+@bottle.route("api/extension/", method="POST")
 def agregar_datoscontacto():
     """ funcion para agregar una extension a la base de datos """
     pass
 
 
-@bottle.route('/extension/:id', method='PUT')
+@bottle.route("api/extension/:id", method="PUT")
 def actualizar_datoscontacto(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
     pass
 
 
-@bottle.route('/extension/:id', method='DELETE')
+@bottle.route("api/extension/:id", method="DELETE")
 def borrar_datoscontacto(id=0):
     """ funcion para borrar una extension en la base de datos """
     pass
 
-# CODIGO PARA MODELO DEPARTAMENTO #
+# metodos REST para modelo departamento #
 
 
-@bottle.route('/departamento/', method='GET')
+@bottle.route("api/departamento/", method="GET")
 def listar_departamento():
     """ funcion para listar todas los registros de los departamentos """
     pass
 
 
-@bottle.route('/departamento/:id', method='GET')
+@bottle.route("api/departamento/:id", method="GET")
 def listar_departamento_id(id):
     """ funcion para listar departamento segun el id enviado """
     pass
 
 
-@bottle.route('/departamento/', method='POST')
+@bottle.route("api/departamento/", method="POST")
 def agregar_departamento():
     """ funcion para agregar un departamento a la base de datos """
     pass
 
 
-@bottle.route('/departamento/:id', method='PUT')
+@bottle.route("api/departamento/:id", method="PUT")
 def actualizar_departamento(id=0):
     """ funcion para actualizar los datos de un departamento en la base de datos """
     pass
 
 
-@bottle.route('/departamento/:id', method='DELETE')
+@bottle.route("api/departamento/:id", method="DELETE")
 def borrar_departamento(id=0):
     """ funcion para borrar un departamento en la base de datos """
     pass
@@ -301,31 +332,31 @@ def borrar_departamento(id=0):
 # MODELO: empleadoextension #
 
 
-@bottle.route('/empleadoextension/', method='GET')
+@bottle.route("api/empleadoextension/", method="GET")
 def listar_empleadoextension():
     """ listar todos: empleadoextension """
     pass
 
 
-@bottle.route('/empleadoextension/:id', method='GET')
+@bottle.route("api/empleadoextension/:id", method="GET")
 def listar_empleadoextension_id(id):
     """ listar id:  empleadoextension """
     pass
 
 
-@bottle.route('/empleadoextension/', method='POST')
+@bottle.route("api/empleadoextension/", method="POST")
 def agregar_empleadoextension():
     """ agregar: empleadoextension """
     pass
 
 
-@bottle.route('/empleandoextension/:id', method='PUT')
+@bottle.route("api/empleandoextension/:id", method="PUT")
 def actualizar_empleadoextension(id=0):
     """ actualizar: empleadoextension """
     pass
 
 
-@bottle.route('/empleadoextension/:id', method='DELETE')
+@bottle.route("api/empleadoextension/:id", method="DELETE")
 def borrar_empleadoextension(id=0):
     """ borrar: empleadoextension """
     pass
@@ -333,7 +364,7 @@ def borrar_empleadoextension(id=0):
 # MODELO: tipoarea #
 
 
-@bottle.route('/tipo_area/', method='GET')
+@bottle.route("api/tipo_area/", method="GET")
 def listar_tipoarea():
     """ listar todos: tipoarea """
     corkServer.require(fail_redirect="/")
@@ -354,7 +385,7 @@ def listar_tipoarea():
     return json_result
 
 
-@bottle.route('/tipo_area/:id', method='GET')
+@bottle.route("api/tipo_area/:id", method="GET")
 def listar_tipoarea_id(id):
     """ listar id:  tipoarea """
     corkServer.require(fail_redirect="/")
@@ -377,7 +408,7 @@ def listar_tipoarea_id(id):
     return json_result
 
 
-@bottle.route('/tipo_area/', method='POST')
+@bottle.route("api/tipo_area/", method="POST")
 def agregar_tipoarea():
     """ agregar: tipoarea """
 
@@ -407,7 +438,7 @@ def agregar_tipoarea():
     return OP_STATUS
 
 
-@bottle.route('/tipo_area/:id', method='PUT')
+@bottle.route("api/tipo_area/:id", method="PUT")
 def actualizar_tipoarea(id=0):
     """ actualizar: tipoarea """
 
@@ -436,7 +467,7 @@ def actualizar_tipoarea(id=0):
     return OP_STATUS
 
 
-@bottle.route('/tipo_area/:id', method='DELETE')
+@bottle.route("api/tipo_area/:id", method="DELETE")
 def borrar_tipoarea(id):
     """ borrar: empleadoextension """
 
@@ -465,31 +496,31 @@ def borrar_tipoarea(id):
 # MODELO: tipodatocontacto #
 
 
-@bottle.route('/tipodatocontacto/', method='GET')
+@bottle.route("api/tipodatocontacto/", method="GET")
 def listar_tipodatocontacto():
     """ listar todos: tipodatocontacto """
     pass
 
 
-@bottle.route('/tipodatocontacto/:id', method='GET')
+@bottle.route("api/tipodatocontacto/:id", method="GET")
 def listar_tipodatocontacto_id(id):
     """ listar id:  tipodatocontacto """
     pass
 
 
-@bottle.route('/tipodatocontacto/', method='POST')
+@bottle.route("api/tipodatocontacto/", method="POST")
 def agregar_tipodatocontacto():
     """ agregar: tipodatocontacto """
     pass
 
 
-@bottle.route('/tipodatocontacto/:id', method='PUT')
+@bottle.route("api/tipodatocontacto/:id", method="PUT")
 def actualizar_tipodatocontacto(id=0):
     """ actualizar: tipodatocontacto """
     pass
 
 
-@bottle.route('/tipodatocontacto/:id', method='DELETE')
+@bottle.route("api/tipodatocontacto/:id", method="DELETE")
 def borrar_tipodatocontacto(id=0):
     """ borrar: tipodatocontacto """
     pass
@@ -497,31 +528,31 @@ def borrar_tipodatocontacto(id=0):
 # MODELO: usuario #
 
 
-@bottle.route('/usuario/', method='GET')
+@bottle.route("api/usuario/", method="GET")
 def listar_usuario():
     """ listar todos: usuarios """
     pass
 
 
-@bottle.route('/usuario/:id', method='GET')
+@bottle.route("api/usuario/:id", method="GET")
 def listar_usuario_id(id):
     """ listar id:  usuario """
     pass
 
 
-@bottle.route('/usuario/', method='POST')
+@bottle.route("api/usuario/", method="POST")
 def agregar_usuario():
     """ agregar: usuario """
     pass
 
 
-@bottle.route('/usuario/:id', method='PUT')
+@bottle.route("api/usuario/:id", method="PUT")
 def actualizar_usuario(id=0):
     """ actualizar: usuario """
     pass
 
 
-@bottle.route('/usuario/:id', method='DELETE')
+@bottle.route("api/usuario/:id", method="DELETE")
 def borrar_usuario(id=0):
     """ borrar: usuario """
     pass
