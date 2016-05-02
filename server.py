@@ -26,7 +26,7 @@ OP_STATUS = {'status': 0, 'message': ''}
 # herramientas
 
 
-b = cork_server.populate_backend()
+b = cork_server.populate_backendPSQL()
 corkServer = cork_server.Cork(backend=b, email_sender="", smtp_url="")
 
 SERVER = cork_server.SessionMiddleware(SERVER, cork_server.session_opts)
@@ -556,6 +556,32 @@ def actualizar_usuario(id=0):
 def borrar_usuario(id=0):
     """ borrar: usuario """
     pass
+
+
+# funciones para administracion de sesiones #
+
+
+@bottle.post("/login")
+def login():
+    """ usuarios registrados """
+    email = post_get("email")
+    password = post_get("password")
+    if corkServer.login(email, password):
+        OP_STATUS['status'] = True
+        OP_STATUS['message'] = "login exitoso!"
+    else:
+        OP_STATUS['status'] = False
+        OP_STATUS['message'] = "error de autenticación"
+
+    return OP_STATUS
+
+
+@bottle.route("/logout")
+def logout():
+    SERVER.logout(success_redirect="/")
+
+
+# punto de inicio del servidor #
 
 
 def main():

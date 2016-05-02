@@ -283,14 +283,14 @@ def enviar_mensajes():
     return func
 
 
-@bottle.route('/OSTicket/SMS/personal', method='POST')
+@bottle.route("/OSTicket/SMS/personal", method="POST")
 def sms_personal():
     
-    aaa.require(fail_redirect='/')
+    aaa.require(fail_redirect="/")
     rs = True
     # Funcion que envia los mensajes
     print "***ENVIANDO MENSAJE PERSONAL***"
-    datos = bottle.request.forms.get('datos').split(',')
+    datos = bottle.request.forms.get("datos").split(",")
     mensaje = bottle.request.forms.get('mensaje')
     mobile = datos[0]
     staff_id = datos[1]

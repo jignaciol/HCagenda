@@ -4,14 +4,17 @@
 from beaker.middleware import SessionMiddleware
 from cork import Cork
 from cork.backends import SQLiteBackend
+from cork.backends import SqlAlchemyBackend
+
+
+def populate_backendPSQL():
+    b = SqlAlchemyBackend("postgresql+psycopg2://postgres:Ign2205@localhost/postgres", initialize=True)
+    return b
 
 
 def populate_backend():
     b = SQLiteBackend("loginDB.db", initialize=False)
     return b
-
-b = populate_backend()
-corkServer = Cork(backend=b, email_sender="", smtp_url="")
 
 session_opts = {
     "session.cookie_expires": True,
@@ -22,4 +25,3 @@ session_opts = {
     "session.validate_key": True,
 }
 
-corkServer = SessionMiddleware(corkServer, session_opts)
