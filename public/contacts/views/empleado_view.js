@@ -13,7 +13,6 @@ contacts.views.empleado_view = Backbone.View.extend({
     template: _.template( $("#empleado-template").html() ),
 
     render: function() {
-        //this.url = "fotos/F00" + this.model.get("ficha") + '.jpg';
         this.url_tested = contacts.utils.checkImgUrl(this.model.get("ficha"));
 
         /* Agrego una variable url_tested al modelo */

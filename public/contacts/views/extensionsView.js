@@ -1,16 +1,16 @@
 var contacts = contacts || {}
 
-contacts.views.formLoginView = Backbone.View.extend({
+contacts.views.ExtensionsView = Backbone.View.extend({
 
     tagName: "li",
 
-    className: "dropdown",
+    className: "contactItem",
 
     events: {
 
     },
 
-    template: _.template( $("#tplFormLogin").html() ),
+    template: _.template( $("#tplExtensionItem").html() ),
 
     render: function() {
         this.$el.html(this.template())

@@ -4,7 +4,6 @@ th,
 a {
 	margin: 0;
 	padding: 0;
-    text-decoration: none;
 }
 
 body {
@@ -164,7 +163,6 @@ ul#listaContactos li {
 }
 
 .loading {
-    background: "public/common/img/loading.gif" 50% no-repeat;
 }
 
 
@@ -175,6 +173,20 @@ ul#listaContactos li {
     padding: 14px 14px 0;
     overflow: hidden;
     background-color: rgba(255,255,255);
+}
+
+ul .dropdown-menu {
+    width: 300px;
+    min-width: 300px;
+    padding: 15px 15px 0;
+    overflow: hidden;
+    background-color: rgba(255,255,255);
+}
+
+.icon-size {
+    font-size: 5em;
+    padding: 5px;
+    margin-top: 10px;
 }
 
 .error404 {

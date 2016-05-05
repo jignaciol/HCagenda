@@ -3,10 +3,9 @@ var contacts = contacts || {}
 contacts.routers.ContactsRouter = Backbone.Router.extend({
 
     routes: {
-        "": "showContacts",
-        "#/contactos": "showContacts",
-        "#/extensiones": "showExtensions",
-        "#/admin": "showAdmin",
+        "contacts": "showContacts",
+        "extensions": "showExtensions",
+        "admin": "showAdmin",
     },
 
     showError: function(){
@@ -22,6 +21,7 @@ contacts.routers.ContactsRouter = Backbone.Router.extend({
 
     showExtensions: function() {
         console.log("Lista de areas con sus extensiones")
+        new contacts.views.listEtensionsView({ el: $("#listaContactos"), model: this.search })
     },
 
     showAdmin: function() {

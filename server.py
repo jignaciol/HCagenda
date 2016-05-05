@@ -18,6 +18,7 @@ SERVER = bottle.app()
 
 # CONSTANTES #
 OP_STATUS = {'status': 0, 'message': ''}
+response = {'OK': False, 'msg': ''}
 
 # En caso de recibir un json a traves de post :: utilizar request.json :P
 
@@ -47,16 +48,20 @@ def json_full():
     return bottle.request.json()
 
 
-@bottle.error(404)
-@bottle.error(400)
-def error500(error):
-    return bottle.static_file("contacts/template/error.html", root="public/")
+# @bottle.error(404)
+# @bottle.error(400)
+# def error500(error):
+#    return bottle.static_file("contacts/template/error.html", root="public/")
 
 
 @bottle.route("/fotos/<filename:path>")
 def static_images(filename):
     """ Funcion que busca las imagenes de los empleados """
-    return bottle.static_file(filename, root="../Fotos")
+    try:
+        img = bottle.static_file(filename, root="../Fotos")
+        return img
+    except Exception:
+        return False
 
 
 @bottle.route("/public/<filename:path>")
@@ -91,13 +96,13 @@ def listar_extensions():
 
         cur.execute(sql)
         records = cur.fetchall()
-        cur.close()
     except psycopg2.Error as error:
         print 'ERROR: no se pudo realizar la conexion: ', error
 
     cabecera = [col[0] for col in cur.description]
     json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
 
+    cur.close()
     return json_result
 
 
@@ -133,13 +138,13 @@ def listar_empleados():
 
         cur.execute(sql)
         records = cur.fetchall()
-        cur.close()
     except psycopg2.Error as error:
         print 'ERROR: no se pudo realizar la conexion: ', error
 
     cabecera = [col[0] for col in cur.description]
     json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
 
+    cur.close()
     return json_result
 
 
@@ -564,21 +569,49 @@ def borrar_usuario(id=0):
 @bottle.post("/login")
 def login():
     """ usuarios registrados """
-    email = post_get("email")
-    password = post_get("password")
-    if corkServer.login(email, password):
-        OP_STATUS['status'] = True
-        OP_STATUS['message'] = "login exitoso!"
+    username = unicode(post_get("username"), "utf-8")
+    password = unicode(post_get("password"), "utf-8")
+    if corkServer.login(username, password):
+        response['OK'] = True
+        response['msg'] = "login exitoso!"
     else:
-        OP_STATUS['status'] = False
-        OP_STATUS['message'] = "error de autenticación"
+        response['OK'] = False
+        response['msg'] = "error de autenticación"
 
-    return OP_STATUS
+    return response
+
+
+@bottle.get("/createuser")
+def createuser_get():
+    """ Formulario para crear usuario """
+    return bottle.static_file("contacts/template/createuser.html", root="public/")
+
+
+@bottle.post("/createuser")
+def createuser():
+    try:
+        email = unicode(post_get("email"), "utf-8")
+        password = unicode(post_get("password"), "utf-8")
+        corkServer.login('admin', 'admin')
+        corkServer.create_user(email, "admin", password)
+        return dict(ok=True, msg='')
+    except Exception, e:
+        return dict(ok=False, msg=e.message)
+
+
+@bottle.post("/getUsername")
+def check_login():
+    user = post_get("username")
+    try:
+        corkServer.require(user=user)
+    except Exception:
+        raise bottle.HTTPError(401)
+    return corkServer.current_user.username
 
 
 @bottle.route("/logout")
 def logout():
-    SERVER.logout(success_redirect="/")
+    corkServer.logout(success_redirect="/")
 
 
 # punto de inicio del servidor #

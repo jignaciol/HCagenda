@@ -10,27 +10,45 @@ contacts.views.top_bar_view = Backbone.View.extend({
     },
 
     initialize: function() {
-       new contacts.views.formLoginView( {el: this.$("#login-dp")})
+        self = this
+        check_login = $.ajax({
+            url: "/getUsername",
+            method: "POST",
+            data: {username: "jignaciol@gmail.com"}
+        })
+        check_login.done(function(response){
+            console.log(response)
+        })
+        /*
+        ver cookie_name = $.cookie("beaker.session.id")
+        if (cookie_name) {
+            console.log(response)
+            new contacts.views.SuccessLogin({el: self.$("#navlogin")})
+        }else{
+            console.log(response)
+            new contacts.views.formLoginView({el: $("#login-dp")})
+        }
+        */
+        new contacts.views.formLoginView({el: $("#login-dp")})
+
     },
 
     doLogin: function(){
-        console.log("doing login ...")
+        self = this
         username = this.$(".input-email").val()
         password = this.$(".input-password").val()
 
-        console.log(username)
-        console.log(password)
         doLogin = $.ajax({
             url: "/login",
             method: "POST",
             data: { username: username, password: password }
         })
 
-        doLogin.done(function(options){
-            if (options.status){
-                console.log("Logeado")
+        doLogin.done(function(response){
+            if (response.OK){
+                new  contacts.views.SuccessLogin({el: self.$("#navlogin")})
             } else {
-                console.log("usuario o clave invalidos")
+                new contacts.views.formLoginView({el: $("#login-dp")})
             }
         })
     },
@@ -40,4 +58,4 @@ contacts.views.top_bar_view = Backbone.View.extend({
         "click .btn-ingresar": "doLogin"
     }
 
-});
+})
