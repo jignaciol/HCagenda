@@ -22,7 +22,7 @@
             this.search = new contacts.models.search()
 
             console.log("Lista de areas con sus extensiones")
-            new contacts.views.listEtensionsView({ el: $("#listaContactos") })
+            new contacts.views.listExtensionsView({el: $("#listaContactos"), model: this.search})
         },
 
         showAdmin: function() {
@@ -32,8 +32,8 @@
 
     new contacts.routers.ContactsRouter
 
-    Backbone.emulateHTTP = true
-    Backbone.emulateJSON = true
+    // Backbone.emulateHTTP = true
+    // Backbone.emulateJSON = true
     Backbone.history.start()
 })(jQuery)
 

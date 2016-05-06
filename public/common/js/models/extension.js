@@ -2,13 +2,12 @@ var contacts = contacts || {};
 
 contacts.models.Extension = Backbone.RelationalModel.extend({
 
-    urlRoot: "extension/",
-
-    idAttribute: "id_extension",
+    urlRoot: "extensions/",
 
     defaults: {
         descripcion: "",
-        numero: ""
+        numero: "",
+        modelo: ""
     },
 
 });

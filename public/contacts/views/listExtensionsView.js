@@ -1,11 +1,9 @@
 var contacts = contacts || {};
 
-contacts.views.listaExtensionsView = Backbone.View.extend({
+contacts.views.listExtensionsView = Backbone.View.extend({
 
    renderExtensionItem: function(extension){
-        var extensionView = new contacts.views.ExtensionView({
-            model: extension
-        });
+        var extensionView = new contacts.views.ExtensionsView({ model: extension });
         this.$el.append(extensionView.render().el);
    },
 
