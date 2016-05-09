@@ -42,77 +42,25 @@
             </div>
         </nav>
         <br><br></br></br>
+
         <div id="container" class="container">
-            <div class="row">
-                <div class="board">
-                    <div class="board-inner">
-                        <ul class="nav nav-tabs" id="myTab">
-                            <div class="liner"></div>
-                            <li class="active">
-                                <a href="" data-toggle="tab" title="Contactos telefonicos por empleados">
-                                    <span class="round-tabs one">
-                                            <i class="glyphicon glyphicon-user"></i>
-                                    </span>
-                                </a></li>
-                            <li>
-                                <a href="" data-toggle="tab" title="Contactos telefonicos por areas">
-                                    <span class="round-tabs two">
-                                        <i class="glyphicon glyphicon-phone-alt"></i>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <div id="btnTabsContactos"></div>
             <div class="row">
                 <ul id="listaContactos"></ul>
             </div>
-
-            </br></br><br/>
-            <footer>
-                <div class='row'>
-                    <div class='col-lg-12'>
-                        <div class='col-lg-3 col-md-6'>
-                            <div class='container'>
-                                <div class='col-lg-3'>
-                                    <div class='panel panel-primary'>
-                                        <div class='panel-heading'>Ultimos cambios</div>
-                                        <div class='panel-body'>
-                                            Contenido del panel
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class='col-lg-3'>
-                                    <div class='panel panel-primary'>
-                                    <div class='panel-heading'>Ultimas extensiones</div>
-                                        <div class='panel-body'>
-                                            Contenido del panel
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class='col-lg-3 col-md-6'>
-                                    <h3>Listas</h3>
-                                    <ul>
-                                        <li><a href=''><i class='glyphicon glyphicon-envelope'></i> Empleados</a></li>
-                                        <li><a href=''><i class='glyphicon glyphicon-briefcase'></i> Departamentos</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class='col-lg-3 col-md-6'>
-                                    <h3>Contacto:</h3>
-                                    <p>Tiene alguna pregunta? Contactenos</p>
-                                    <p><a href='mailto:sistemas.hospitalcoromoto@gmail.com' title='Contactenos'><i class=''></i> Contactenos</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
     <!-- template de login -->
@@ -186,6 +134,53 @@
         </li>
     </script>
 
+    <script id="" type="text/template">
+        <footer>
+            <div class='row'>
+                <div class='col-lg-12'>
+                    <div class='col-lg-3 col-md-6'>
+                        <div class='container'>
+                            <div class='col-lg-3'>
+                                <div class='panel panel-primary'>
+                                    <div class='panel-heading'>Ultimos cambios</div>
+                                    <div class='panel-body'>
+                                        Contenido del panel
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class='col-lg-3'>
+                                <div class='panel panel-primary'>
+                                <div class='panel-heading'>Ultimas extensiones</div>
+                                    <div class='panel-body'>
+                                        Contenido del panel
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class='col-lg-3 col-md-6'>
+                                <h3>Listas</h3>
+                                <ul>
+                                    <li><a href=''><i class='glyphicon glyphicon-envelope'></i> Empleados</a></li>
+                                    <li><a href=''><i class='glyphicon glyphicon-briefcase'></i> Departamentos</a></li>
+                                </ul>
+                            </div>
+
+                            <div class='col-lg-3 col-md-6'>
+                                <h3>Contacto:</h3>
+                                <p>Tiene alguna pregunta? Contactenos</p>
+                                <p><a href='mailto:sistemas.hospitalcoromoto@gmail.com' title='Contactenos'><i class=''></i> Contactenos</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </script>
+
+
+
+
 
     <!-- template menu -->
     <script id="" type="text/template">
@@ -195,9 +190,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Agenda<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Empleados</a></li>
-                                        <li><a href="#">Asignar Extensi&oacute;n</a></li>
+                        <li><a href="#">Asignar Extensi&oacute;n</a></li>
                         <li><a href="#">Extensiones</a></li>
-                                        <li><a href="#">Departamentos</a></li>
+                        <li><a href="#">Departamentos</a></li>
                     </ul>
                 </li>
                         <li class="dropdown">
@@ -218,6 +213,31 @@
             </ul>
         </div>
     </script>
+
+    <script id="tplBtnContactos" type="text/template">
+        <div class="board">
+            <div class="board-inner">
+                <ul class="nav nav-tabs" id="myTab">
+                    <div class="liner"></div>
+                    <li class="active">
+                        <a href="" data-toggle="tab" title="Contactos telefonicos por empleados">
+                            <span class="round-tabs one">
+                                    <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                        </a></li>
+                    <li>
+                        <a href="" data-toggle="tab" title="Contactos telefonicos por areas">
+                            <span class="round-tabs two">
+                                <i class="glyphicon glyphicon-phone-alt"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </script>
+
+
 
 
     <!-- template para la lista de contactos=extensiones=areas del hospital -->
@@ -353,15 +373,57 @@
 
     <!-- template lista tipos de areas -->
     <script id="tplTipoAreaReg" type='text/template'>
-        <div class='col-md-6'><span class='descripcion-area'><%= descripcion %></div>
+        <div class='col-md-6'><span class='descripcion-tarea'><%= descripcion %></div>
         <div class='col-md-2'><%= fec_ing %></div>
-        <div class='col-md-2 estado-area'>
+        <div class='col-md-2 estado-tarea'>
             <% if (bl == 0) {%>
                 Oculto
             <% } else { %>
                 Visible
             <% } %>
         </div>
+        <div class='col-md-2'>
+            <button class="btn btn-warning edit-tarea">
+                <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-danger delete-tarea">
+                <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-success update-tarea oculto">
+                <span class='glyphicon glyphicon-floppy-disk' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-danger cancel-tarea oculto">
+                <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+            </button>
+        </div>
+    </script>
+
+    <!-- template formulario agregar tipo area -->
+    <script id="tplTipoAreaForm" type="text/template">
+        <div class="row">
+            <div class="col-md-8">
+                <input class="form-control input-desc-tarea" type="text"></input>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select-tarea-bl">
+                    <option value="0">Oculto</option>
+                    <option value="1">Visible</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success btn-agrega-tarea"><span class="glyphicon glyphicon-plus"></span></button>
+            </div>
+        </div>
+    </script>
+
+
+    <!-- *******CRUD TABLA AREA******* -->
+    <!-- template lista de areas -->
+    <script id="tplAreaReg" type='text/template'>
+        <div class='col-md-4'><span class='descripcion-area'><%= descripcion %></div>
+        <div class='col-md-2'><%= fec_ing %></div>
+        <div class="col-md-2"><%= tipo_area %></div>
+        <div class='col-md-2 estado-area'><%= bl %></div>
         <div class='col-md-2'>
             <button class="btn btn-warning edit-area">
                 <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
@@ -378,23 +440,180 @@
         </div>
     </script>
 
-    <!-- template formulario agregar tipo area -->
-    <script id="tplTipoAreaForm" type="text/template">
+    <!-- template formulario agregar area -->
+    <script id="tplAreaForm" type="text/template">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <input class="form-control input-desc-area" type="text"></input>
             </div>
             <div class="col-md-2">
                 <select class="form-control select-area-bl">
-                    <option value="0">Oculto</option>
-                    <option value="1">Visible</option>
+                    <%= lista_bl %>
                 </select>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-success btn-agrega-area"><span class="glyphicon glyphicon-plus"></span></button>
+                <select class="form-control select-area-tipoarea">
+                    <%= lista_tipo_area %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success btn-agrega-tarea"><span class="glyphicon glyphicon-plus"></span></button>
             </div>
         </div>
     </script>
+
+
+    <!-- *******CRUD TABLA DEPARTAMENTO*******  -->
+    <!-- template lista de departamentos -->
+    <script id="tplDepartamentoReg" type='text/template'>
+        <div class="col-md-4"><span class='descripcion-dpto'><%= descripcion %></div>
+        <div class="col-md-2"><%= fec_ing %></div>
+        <div class="col-md-2"><%= bl %></div>
+        <div class="col-md-2"><%= ubicacion %></div>
+        <div class="col-md-2"><%= piso %></div>
+        <div class="col-md-2">
+            <button class="btn btn-warning edit-dpto">
+                <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-danger delete-dpto">
+                <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-success update-dpto oculto">
+                <span class='glyphicon glyphicon-floppy-disk' aria-hidden='true'></span>
+            </button>
+            <button class="btn btn-danger cancel-dpto oculto">
+                <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+            </button>
+        </div>
+    </script>
+
+    <!-- template formulario agregar departamento -->
+    <script id="tplDepartamentoForm" type="text/template">
+        <div class="row">
+            <div class="col-md-4">
+                <input class="form-control input-desc-dpto" type="text"></input>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select-departamentos">
+                    <%= lista_departamentos %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select-dpto-ubic">
+                    <%= lista_ubicaciones %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select-dpto-pisos">
+                    <%= lista_pisos %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success btn-agrega-dpto"><span class="glyphicon glyphicon-plus"></span></button>
+            </div>
+        </div>
+    </script>
+
+    <!-- *******CRUD TABLA EXTENSION******* -->
+    <!-- template lista de extensiones -->
+    <script id="tplExtensionReg" type='text/template'>
+        <div class="row">
+            <div class="col-md-8"><span class='descripcion-ext'><%= departamento %></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><%= numero %></div>
+            <div class="col-md-2"><%= fecha_ingreso %></div>
+            <div class="col-md-2"><%= bl %></div>
+            <div class="col-md-2"><%= csp %></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><%= tipo %></div>
+            <div class="col-md-2"><%= modelo %></div>
+            <div class="col-md-2"><%= serial %></div>
+            <div class="col-md-2"><%= mac-pos %></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><%= grupo %></div>
+            <div class="col-md-2"><%= status %></div>
+            <div class="col-md-2"><%= lim %></div>
+            <div class="col-md-2"><%= fecha_inventario %></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-warning edit-extension">
+                    <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
+                </button>
+                <button class="btn btn-danger delete-extension">
+                    <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
+                </button>
+                <button class="btn btn-success update-extension oculto">
+                    <span class='glyphicon glyphicon-floppy-disk' aria-hidden='true'></span>
+                </button>
+                <button class="btn btn-danger cancel-extension oculto">
+                    <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+                </button>
+            </div>
+        </div>
+    </script>
+
+    <!-- template formulario agregar departamento -->
+    <script id="tplExtensionForm" type="text/template">
+        <div class="row">
+            <div class="row">
+                <div class="col-md-4">
+                    <select class="form-control select-extensiones">
+                        <%= lista_bl %>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <input class="form-control input-numero" type="text"></input>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control select-status">
+                        <%= lista_bl %>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control input-csp" type="text"></input>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control input-tipo" type="text"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <input class="form-control input-modelo" type="text"></input>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control input-serial" type="text"></input>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control input-mac-pos" type="text"></input>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control input-grupoc" type="text"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="form-control input-modelo" type="text"></input>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control input-serial" type="text"></input>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control input-mac-pos" type="text"></input>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+
+
+
 
     <!-- template de error -->
     <script id="tplErrorPage" type="text/template">

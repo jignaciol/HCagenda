@@ -15,6 +15,7 @@
             this.search = new contacts.models.search()
 
             var topBar = new contacts.views.top_bar_view({model: this.search})
+            var contactBar = ""
             var listaEmpleado = new contacts.views.listaEmpleadosView({ el: $("#listaContactos"), model: this.search})
         },
 
@@ -32,8 +33,8 @@
 
     new contacts.routers.ContactsRouter
 
-    // Backbone.emulateHTTP = true
-    // Backbone.emulateJSON = true
+    Backbone.emulateHTTP = true
+    Backbone.emulateJSON = true
     Backbone.history.start()
 })(jQuery)
 

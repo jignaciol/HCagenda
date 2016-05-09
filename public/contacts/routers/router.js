@@ -3,9 +3,8 @@ var contacts = contacts || {}
 contacts.routers.ContactsRouter = Backbone.Router.extend({
 
     routes: {
-        "contacts": "showContacts",
-        "extensions": "showExtensions",
-        "admin": "showAdmin",
+        "": "showContacts",
+        "/": "showContacts",
     },
 
     showError: function(){

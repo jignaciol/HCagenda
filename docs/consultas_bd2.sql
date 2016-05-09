@@ -13,14 +13,14 @@ INSERT INTO "Agenda".tipo_area(
 
 SELECT * FROM "Agenda".empleado;
 SELECT * FROM "Agenda".tipo_area;
-SELECT * FROM "Agenda"."Area";
 SELECT * FROM "Agenda".departamento;
 SELECT * FROM "Agenda"."tipoDatoContacto";
 SELECT * FROM "Agenda"."datosContacto";
 SELECT * FROM "Agenda"."Extension";
 SELECT * FROM "Agenda"."empleadoExtension";
 
-
+SELECT id, descripcion, fec_ing, bl, id_tipo_area FROM "Agenda"."Area";
+SELECT * FROM "Agenda"."Area";
 
 
 
