@@ -50,7 +50,7 @@ contacts.views.listaEmpleadosView = Backbone.View.extend({
 
    dispose: function() {
 
-       this.remove()
+       //this.remove()
 
        this.off()
 

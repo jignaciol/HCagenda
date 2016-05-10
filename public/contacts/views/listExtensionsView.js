@@ -44,6 +44,16 @@ contacts.views.listExtensionsView = Backbone.View.extend({
                self.render();
            }
        });
-   }
+   },
+
+   dispose: function() {
+
+       //this.remove()
+
+       this.off()
+
+       this.model.off(null, null, this)
+
+    }
 
 });

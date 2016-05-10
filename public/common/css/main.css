@@ -6,6 +6,10 @@ a {
 	padding: 0;
 }
 
+i {
+    cursor: hand;
+}
+
 body {
 	font: 16px 'Helvetica Neue', Helvetica, Arial;
 	font-weight: 300;
@@ -16,15 +20,15 @@ body {
 	font-smoothing: antialiased;
 }
 
-ul#listaContactos {
+.panel-body {
     list-style: none;
-    padding: 0px;
+    padding: 20px;
     margin-top: 25px;
     background: #fff;
     width: 100%;
 }
 
-ul#listaContactos li {
+.panel-body li {
     list-style: none;
     border-bottom: 1px solid #eee;
     display: block;

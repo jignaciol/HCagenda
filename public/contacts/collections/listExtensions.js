@@ -12,7 +12,7 @@ contacts.collections.listExtensions = Backbone.Collection.extend({
         var pattern = new RegExp(letters,"ig");
 
         return _(this.filter(function(extension){
-            return pattern.test(extension.get("extension"));
+            return pattern.test(extension.get("descripcion"));
         }));
     }
 });

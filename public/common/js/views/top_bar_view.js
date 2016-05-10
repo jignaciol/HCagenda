@@ -17,7 +17,7 @@ contacts.views.top_bar_view = Backbone.View.extend({
             data: {username: "jignaciol@gmail.com"}
         })
         check_login.done(function(response){
-            console.log(response)
+           // console.log(response)
         })
         /*
         ver cookie_name = $.cookie("beaker.session.id")

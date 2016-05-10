@@ -3,8 +3,7 @@
     contacts.routers.ContactsRouter = Backbone.Router.extend({
 
         routes:{
-            "": "showContacts",
-            "extensions": "showExtensions",
+            "": "showContacts"
         },
 
         showError: function(){
@@ -12,18 +11,9 @@
         },
 
         showContacts: function() {
-            this.search = new contacts.models.search()
-
-            var topBar = new contacts.views.top_bar_view({model: this.search})
-            var contactBar = ""
-            var listaEmpleado = new contacts.views.listaEmpleadosView({ el: $("#listaContactos"), model: this.search})
-        },
-
-        showExtensions: function() {
-            this.search = new contacts.models.search()
-
-            console.log("Lista de areas con sus extensiones")
-            new contacts.views.listExtensionsView({el: $("#listaContactos"), model: this.search})
+            var search = new contacts.models.search();
+            var topBar = new contacts.views.top_bar_view({ model: search })
+            var contactBar = new contacts.views.contactBar({ el: $("#btnTabsContacts"), model: search })
         },
 
         showAdmin: function() {
