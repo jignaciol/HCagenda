@@ -13,7 +13,7 @@
         showContacts: function() {
             var search = new contacts.models.search();
             var topBar = new contacts.views.top_bar_view({ model: search })
-            var contactBar = new contacts.views.contactBar({ el: $("#btnTabsContacts"), model: search })
+            var contactBar = new contacts.views.contactBar({ el: $("#btnTabsContacts"), model: search, topBar: topBar })
         },
 
         showAdmin: function() {
@@ -21,7 +21,7 @@
         },
     })
 
-    new contacts.routers.ContactsRouter
+    var contactsApp = new contacts.routers.ContactsRouter()
 
     Backbone.emulateHTTP = true
     Backbone.emulateJSON = true

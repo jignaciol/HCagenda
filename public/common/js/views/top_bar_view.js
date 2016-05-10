@@ -6,11 +6,14 @@ contacts.views.top_bar_view = Backbone.View.extend({
 
     keyupRead: function() {
         this.model.set({word: this.$("#searchBox").val()})
-        this.model.save()
+        //this.model.save()
     },
 
     initialize: function() {
+        this.cleanSearchBox()
         self = this
+
+        /*
         check_login = $.ajax({
             url: "/getUsername",
             method: "POST",
@@ -19,7 +22,7 @@ contacts.views.top_bar_view = Backbone.View.extend({
         check_login.done(function(response){
            // console.log(response)
         })
-        /*
+
         ver cookie_name = $.cookie("beaker.session.id")
         if (cookie_name) {
             console.log(response)
@@ -31,6 +34,10 @@ contacts.views.top_bar_view = Backbone.View.extend({
         */
         new contacts.views.formLoginView({el: $("#login-dp")})
 
+    },
+
+    cleanSearchBox: function() {
+        this.$("#searchBox").val("")
     },
 
     doLogin: function(){
@@ -47,6 +54,8 @@ contacts.views.top_bar_view = Backbone.View.extend({
         doLogin.done(function(response){
             if (response.OK){
                 new  contacts.views.SuccessLogin({el: self.$("#navlogin")})
+                console.log("ingreso exitoso!")
+                new contacts.views.menuView({ el: self.$("#menuUsuarioLog") })
             } else {
                 new contacts.views.formLoginView({el: $("#login-dp")})
             }

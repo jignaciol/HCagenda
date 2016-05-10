@@ -15,6 +15,7 @@ contacts.views.contactBar = Backbone.View.extend({
         /*if(this.extensions){
             this.extensions.dispose()
         }*/
+        $("#searchBox").val("")
         this.contacts = new contacts.views.listaEmpleadosView({ el: this.$(".panel-body"), model: this.model})
     },
 
@@ -22,6 +23,7 @@ contacts.views.contactBar = Backbone.View.extend({
         /*if(this.contacts){
             this.contacts.dispose()
         }*/
+        $("#searchBox").val("")
         this.extensions =  new contacts.views.listExtensionsView({el: this.$(".panel-body"), model: this.model})
     },
 
