@@ -563,6 +563,58 @@ def borrar_usuario(id=0):
     pass
 
 
+# MODELO: menuOpcion #
+
+
+@bottle.route("/api/menuopcion/", method="GET")
+def listar_menuopcion():
+    """ listar todos: opciones de menu """
+    # corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT id_opcion, descripcion, url,
+                         to_char(fec_asig, 'DD-MM-YYYY') as fec_asig,
+                         to_char(fec_desact, 'DD-MM-YYYY') as fec_desct, bl
+                  FROM "Agenda"."menuOpcion"; """
+        print sql
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("api/menuopcion/:id", method="GET")
+def listar_menuopcion_id(id):
+    """ listar id:  opcion de menu """
+    pass
+
+
+@bottle.route("api/menuopcion/", method="POST")
+def agregar_menuopcion():
+    """ agregar: opcion de menu """
+    pass
+
+
+@bottle.route("api/menuopcion/:id", method="PUT")
+def actualizar_menuopcion(id=0):
+    """ actualizar: actualizar opcion de menu """
+    pass
+
+
+@bottle.route("api/menuopcion/:id", method="DELETE")
+def borrar_menuopcion(id=0):
+    """ borrar: opcion de menu """
+    pass
+
+
 # funciones para administracion de sesiones #
 
 
