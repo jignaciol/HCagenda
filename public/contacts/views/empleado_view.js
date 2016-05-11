@@ -10,7 +10,7 @@ contacts.views.empleado_view = Backbone.View.extend({
         "click .mostrar-detalles": "mostrarDetalles"
     },
 
-    template: _.template( $("#empleado-template").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("EmpleadoTemplate") ),
 
     render: function() {
         this.url_tested = contacts.utils.checkImgUrl(this.model.get("ficha"));

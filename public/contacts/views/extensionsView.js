@@ -10,7 +10,7 @@ contacts.views.ExtensionsView = Backbone.View.extend({
 
     },
 
-    template: _.template( $("#tplExtensionItem").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("ExtensionItem") ),
 
     render: function() {
         this.$el.html(this.template( this.model.toJSON() ))

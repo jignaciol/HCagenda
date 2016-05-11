@@ -6,7 +6,7 @@ contacts.views.menuView = Backbone.View.extend({
 
     },
 
-    template: _.template( $("#tplMenuPrincipal").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("menuPrincipal") ),
 
     render: function(){
         this.$el.html( this.template() )

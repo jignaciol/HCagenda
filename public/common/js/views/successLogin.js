@@ -8,7 +8,7 @@ contacts.views.SuccessLogin = Backbone.View.extend({
 
     events: {},
 
-    template: _.template( $("#tplSuccessLogin").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("SuccessLogin") ),
 
     render: function(){
         this.$el.html( this.template() )

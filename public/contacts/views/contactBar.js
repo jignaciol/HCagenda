@@ -12,22 +12,22 @@ contacts.views.contactBar = Backbone.View.extend({
     },
 
     showContacts: function() {
-        /*if(this.extensions){
+        if(this.extensions){
             this.extensions.dispose()
-        }*/
+        }
         $("#searchBox").val("")
         this.contacts = new contacts.views.listaEmpleadosView({ el: this.$(".panel-body"), model: this.model})
     },
 
     showExtensions: function() {
-        /*if(this.contacts){
+        if(this.contacts){
             this.contacts.dispose()
-        }*/
+        }
         $("#searchBox").val("")
         this.extensions =  new contacts.views.listExtensionsView({el: this.$(".panel-body"), model: this.model})
     },
 
-    template: _.template( $("#tplBtnContactos").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("BtnContactos") ),
 
     render: function() {
         this.$el.html( this.template());

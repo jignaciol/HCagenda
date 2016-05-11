@@ -1,0 +1,50 @@
+<div class="row cabecera-lista">
+                <div class="col-sm-5">
+                    <img class="foto-miniatura loading img<%= ficha %>"
+                        src = "public/common/img/loading_32x32.gif">
+                    <a class='mostrar-detalles' ><%= nombre %>&nbsp;<%= apellido %></a>
+                </div>
+                <div class='col-sm-2'>
+                    <%= telefono %>
+                </div>
+                <div class='col-sm-4'>
+                    <%= departamento %>
+                </div>
+            </div>
+            <div class="detalles row">
+                <div class="col-sm-2 ficha-foto">
+                    <img class="img-rounded loading img<%= ficha %>"
+                        src = "public/common/img/loading_32x32.gif">
+                </div>
+                <div class="col-sm-5 ficha-detalle">
+                    <table class="table table-user-information">
+                        <tbody>
+
+                            <tr>
+                                <td><h4><strong>Ficha</strong>&nbsp;<%= ficha %></h4></td>
+                                <td><h4><strong>Nombre</strong>&nbsp;&nbsp;<%= nombre %></h4></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Departamento</strong></td>
+                                <td><%= departamento %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Extensión</strong></td>
+                                <td><%= telefono %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Usuario</strong></td>
+                                <td>NO DISPONIBLE</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Correo Electronico:</strong></td>
+                                <td>correo_electronico@pdvsa.com</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ubicacion</strong></td>
+                                <td>NO DISPONIBLE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>

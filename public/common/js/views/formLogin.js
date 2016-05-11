@@ -10,7 +10,7 @@ contacts.views.formLoginView = Backbone.View.extend({
 
     },
 
-    template: _.template( $("#tplFormLogin").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("FormLogin") ),
 
     render: function() {
         this.$el.html(this.template())

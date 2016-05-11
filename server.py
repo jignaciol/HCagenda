@@ -61,7 +61,13 @@ def static_images(filename):
         img = bottle.static_file(filename, root="../Fotos")
         return img
     except Exception:
-        return False
+        return response
+
+
+@bottle.route("/api/template/<filename:path>")
+def static_template(filename):
+    """ Funcion que busca y devuelve el archivo template solicitado """
+    return bottle.static_file(filename, root="public/common/template")
 
 
 @bottle.route("/public/<filename:path>")

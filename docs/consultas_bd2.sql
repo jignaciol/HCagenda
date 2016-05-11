@@ -18,11 +18,16 @@ SELECT * FROM "Agenda"."tipoDatoContacto";
 SELECT * FROM "Agenda"."datosContacto";
 SELECT * FROM "Agenda"."Extension";
 SELECT * FROM "Agenda"."empleadoExtension";
+SELECT * FROM "Agenda"."menuOpcion";
+
 
 SELECT id, descripcion, fec_ing, bl, id_tipo_area FROM "Agenda"."Area";
 SELECT * FROM "Agenda"."Area";
 
-
+SELECT id_opcion, descripcion, url,
+                         to_char(fec_asig, 'DD-MM-YYYY') as fec_asig,
+                         to_char(fec_desact, 'DD-MM-YYYY') as fec_desct, bl
+                  FROM "Agenda".tipoarea;
 
 
 ***CONSULTAS***
@@ -66,6 +71,15 @@ INSERT INTO "Agenda"."Extension"(
             id_departamento, numero, fec_ing, bl, csp, tipo, modelo, serial, "mac-pos", fecha_inventario)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?);
+
+
+
+
+INSERT INTO "Agenda"."menuOpcion"(descripcion, url, fec_asig, fec_desact, bl)
+    VALUES ('Mensajeria (SMS)', '#', '2016-05-11', '2016-05-11', 1);
+
+
+
 
 
 
@@ -152,4 +166,54 @@ FROM "Agenda"."Extension" ext
 LEFT JOIN "Agenda".departamento d ON d.id = ext.id_departamento
 
 SELECT * FROM "Agenda".departamento;
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- DROP TABLE "Agenda"."menuOpcion";
+
+CREATE TABLE "Agenda"."menuOpcion"
+(
+  id_opcion bigserial NOT NULL,
+  descripcion character varying,
+  url character varying,
+  fec_asig date,
+  fec_desact date,
+  bl integer,
+  CONSTRAINT id_opcion PRIMARY KEY (id_opcion)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "Agenda"."menuOpcion"
+  OWNER TO postgres;
+
+
+
+-- DROP TABLE "Agenda"."menuUsuario";
+
+CREATE TABLE "Agenda"."menuUsuario"
+(
+  "id_menuUsuario" bigserial NOT NULL,
+  username character varying,
+  "id_opcionMenu" bigint,
+  fec_asig date,
+  fec_desact date,
+  bl integer,
+  CONSTRAINT "id_menuUsuario" PRIMARY KEY ("id_menuUsuario")
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "Agenda"."menuUsuario"
+  OWNER TO postgres;
 
