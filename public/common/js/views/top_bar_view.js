@@ -54,7 +54,6 @@ contacts.views.top_bar_view = Backbone.View.extend({
         doLogin.done(function(response){
             if (response.OK){
                 new  contacts.views.SuccessLogin({el: self.$("#navlogin")})
-                console.log("ingreso exitoso!")
                 new contacts.views.menuView({ el: self.$("#menuUsuarioLog") })
             } else {
                 new contacts.views.formLoginView({el: $("#login-dp")})

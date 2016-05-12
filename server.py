@@ -40,13 +40,7 @@ def post_get(name):
 
 def json_get(name):
     """Funcion para capturar valores enviados por json"""
-    return bottle.request.json.get(name)
-
-
-def json_full():
-    """ Funcion que devuelve todo el json enviado por POST """
-    return bottle.request.json()
-
+    print bottle.request.json
 
 # @bottle.error(404)
 # @bottle.error(400)
@@ -67,7 +61,7 @@ def static_images(filename):
 @bottle.route("/api/template/<filename:path>")
 def static_template(filename):
     """ Funcion que busca y devuelve el archivo template solicitado """
-    return bottle.static_file(filename, root="public/common/template")
+    return bottle.static_file(filename, root="public/template/")
 
 
 @bottle.route("/public/<filename:path>")
@@ -80,7 +74,7 @@ def static(filename):
 @bottle.route("/", method="GET")
 def index():
     """ Funcion que devuelve solo el index del directorio """
-    return bottle.static_file("contacts/template/index.html", root="public/")
+    return bottle.static_file("index.html", root="public/")
 
 
 # consulta de lista de contactos #
@@ -375,10 +369,10 @@ def borrar_empleadoextension(id=0):
 # MODELO: tipoarea #
 
 
-@bottle.route("api/tipo_area/", method="GET")
+@bottle.route("/api/tipo_area/", method="GET")
 def listar_tipoarea():
     """ listar todos: tipoarea """
-    corkServer.require(fail_redirect="/")
+    # corkServer.require(fail_redirect="/")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -396,7 +390,7 @@ def listar_tipoarea():
     return json_result
 
 
-@bottle.route("api/tipo_area/:id", method="GET")
+@bottle.route("/api/tipo_area/:id", method="GET")
 def listar_tipoarea_id(id):
     """ listar id:  tipoarea """
     corkServer.require(fail_redirect="/")
@@ -419,10 +413,9 @@ def listar_tipoarea_id(id):
     return json_result
 
 
-@bottle.route("api/tipo_area/", method="POST")
+@bottle.route("/api/tipo_area/", method="POST")
 def agregar_tipoarea():
     """ agregar: tipoarea """
-
     descripcion = json_get('descripcion')
     bl = json_get('bl')
     today = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -449,7 +442,7 @@ def agregar_tipoarea():
     return OP_STATUS
 
 
-@bottle.route("api/tipo_area/:id", method="PUT")
+@bottle.route("/api/tipo_area/:id", method="PUT")
 def actualizar_tipoarea(id=0):
     """ actualizar: tipoarea """
 
@@ -478,7 +471,7 @@ def actualizar_tipoarea(id=0):
     return OP_STATUS
 
 
-@bottle.route("api/tipo_area/:id", method="DELETE")
+@bottle.route("/api/tipo_area/:id", method="DELETE")
 def borrar_tipoarea(id):
     """ borrar: empleadoextension """
 

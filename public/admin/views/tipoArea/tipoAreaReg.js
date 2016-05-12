@@ -1,32 +1,32 @@
-var app = app || {};
+var contacts = contacts || {};
 
-app.views.TipoAreaReg = Backbone.View.extend({
+contacts.views.TipoAreaReg = Backbone.View.extend({
 
     tagName: "li",
 
     className: "list-group-item",
 
     events: {
-        'click .edit-area': 'edit',
-        'click .delete-area': 'delete',
-        'click .update-area': 'update',
-        'click .cancel-area': 'cancel'
+        'click .edit-tipoArea': 'edit',
+        'click .delete-tipoArea': 'delete',
+        'click .update-tipoArea': 'update',
+        'click .cancel-tipoArea': 'cancel'
     },
 
     edit: function() {
-        this.render();
-        this.$('.edit-area').hide();
-        this.$('.delete-area').hide();
-        this.$('.update-area').show();
-        this.$('.cancel-area').show();
+        //this.render();
+        this.$('.edit-tipoArea').hide();
+        this.$('.delete-tipoArea').hide();
+        this.$('.update-tipoArea').show();
+        this.$('.cancel-tipoArea').show();
 
-        var descripcion = this.$('.descripcion-area').html();
+        var descripcion = this.$('.descripcion-tipoArea').html();
 
-        this.$('.descripcion-area').html('<input name="descripcion" type="text" class="form-control descripcion-update" value="' + descripcion + '">');
+        this.$('.descripcion-tipoArea').html('<input name="descripcion" type="text" class="form-control descripcion-update" value="' + descripcion + '">');
         if (this.model.get('bl') == 0) {
-            this.$('.estado-area').html('<select name="bl" class="form-control data-estado-area"> <option value="0" selected="selected">Oculto</option> <option value="1">Visible</option> </select>');
+            this.$('.estado-tipoArea').html('<select name="bl" class="form-control data-estado-area"> <option value="0" selected="selected">Oculto</option> <option value="1">Visible</option> </select>');
         } else {
-            this.$('.estado-area').html('<select name="bl" class="form-control data-estado-area"> <option value="0">Oculto</option> <option value="1" selected="selected">Visible</option> </select>');
+            this.$('.estado-tipoArea').html('<select name="bl" class="form-control data-estado-area"> <option value="0">Oculto</option> <option value="1" selected="selected">Visible</option> </select>');
         }
     },
 
@@ -49,7 +49,7 @@ app.views.TipoAreaReg = Backbone.View.extend({
         this.model.destroy()
     },
 
-    template: _.template( $("#tplTipoAreaReg").html() ),
+    template: _.template( contacts.utils.loadHtmlTemplate("TipoAreaReg") ),
 
     render: function() {
         this.$el.html( this.template( this.model.toJSON() ) );

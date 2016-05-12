@@ -11,14 +11,14 @@
         },
 
         showContacts: function() {
-            var search = new contacts.models.search();
-            var topBar = new contacts.views.top_bar_view({ model: search })
-            var contactBar = new contacts.views.contactBar({ el: $("#btnTabsContacts"), model: search, topBar: topBar })
+            contacts.app.search = new contacts.models.search();
+            contacts.app.topBar = new contacts.views.top_bar_view({ model: contacts.app.search })
+            contacts.app.contactBar = new contacts.views.contactBar({
+                el: $("#btnTabsContacts"),
+                model: contacts.app.search
+            })
         },
 
-        showAdmin: function() {
-            console.log("Pagina administratia")
-        },
     })
 
     var contactsApp = new contacts.routers.ContactsRouter()

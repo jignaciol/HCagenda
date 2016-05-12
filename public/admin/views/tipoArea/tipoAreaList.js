@@ -1,9 +1,9 @@
-var app = app || {};
+var contacts = contacts || {};
 
-app.views.TipoAreaList = Backbone.View.extend({
+contacts.views.TipoAreaList = Backbone.View.extend({
 
     render_tipo_area: function(tipo_area){
-        var tipoAreaReg = new app.views.TipoAreaReg({
+        var tipoAreaReg = new contacts.views.TipoAreaReg({
             model: tipo_area
         })
         this.$el.append(tipoAreaReg.render().el);
@@ -25,7 +25,6 @@ app.views.TipoAreaList = Backbone.View.extend({
         this.collection.on('add', this.render, this)
         this.collection.on('remove', this.render, this)
         this.collection.on('change', this.render, this)
-
         self = this;
         this.collection.fetch({
             success: function() {
