@@ -4,6 +4,8 @@
 __author__ = 'jignaciol'
 
 import bottle
+import requests
+from bottle import request
 import psycopg2
 import json
 import datetime
@@ -369,7 +371,7 @@ def borrar_empleadoextension(id=0):
 # MODELO: tipoarea #
 
 
-@bottle.route("/api/tipo_area/", method="GET")
+@bottle.route("/api/tipo_area", method="GET")
 def listar_tipoarea():
     """ listar todos: tipoarea """
     # corkServer.require(fail_redirect="/")
@@ -413,11 +415,18 @@ def listar_tipoarea_id(id):
     return json_result
 
 
-@bottle.route("/api/tipo_area/", method="POST")
+@bottle.route('/api/tipo_area', method='POST')
 def agregar_tipoarea():
     """ agregar: tipoarea """
-    descripcion = json_get('descripcion')
-    bl = json_get('bl')
+    # corkServer.require(fail_redirect="/")
+    #data = bottle.request.query
+
+    data = request.json()
+    print "Data = ", data
+
+
+    # descripcion = data['descripcion']
+    # bl = data['bl']
     today = datetime.datetime.today().strftime('%Y-%m-%d')
 
     try:
@@ -426,10 +435,10 @@ def agregar_tipoarea():
 
         sql = """ INSERT INTO "Agenda".tipoarea(fec_ing, bl, descripcion)
                      VALUES ('{0}', {1}, '{2}');
-              """.format(today, bl, descripcion)
+              """.format(today, 0, '')
 
         cur.execute(sql)
-        conn.commit()
+        # conn.commit()
         cur.close()
         conn.close()
 

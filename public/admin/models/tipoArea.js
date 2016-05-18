@@ -2,13 +2,11 @@ var contacts = contacts || {};
 
 contacts.models.tipoArea = Backbone.RelationalModel.extend({
 
-    urlRoot: "api/tipo_area/",
-
-    idAttribute: "id",
+    url: "/api/tipo_area",
 
     defaults: {
-        descripcion: "",
-        fec_ing: "",
+        descripcion: '',
+        fec_ing: '',
         bl: 1
     }
 
