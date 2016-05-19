@@ -23,8 +23,8 @@
 
     var contactsApp = new contacts.routers.ContactsRouter()
 
-    Backbone.emulateHTTP = true
-    Backbone.emulateJSON = true
+//    Backbone.emulateHTTP = true
+//    Backbone.emulateJSON = true
     Backbone.history.start()
 })(jQuery)
 

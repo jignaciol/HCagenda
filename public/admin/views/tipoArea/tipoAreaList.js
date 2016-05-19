@@ -21,6 +21,15 @@ contacts.views.TipoAreaList = Backbone.View.extend({
         this.render()
     },
 
+    reloadData: function() {
+         self = this;
+        this.collection.fetch({
+            success: function() {
+                self.render();
+            }
+        });
+    },
+
     initialize: function() {
         this.collection.on('add', this.render, this)
         this.collection.on('remove', this.render, this)

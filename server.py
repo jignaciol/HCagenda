@@ -4,8 +4,6 @@
 __author__ = 'jignaciol'
 
 import bottle
-import requests
-from bottle import request
 import psycopg2
 import json
 import datetime
@@ -42,7 +40,12 @@ def post_get(name):
 
 def json_get(name):
     """Funcion para capturar valores enviados por json"""
-    print bottle.request.json
+    data = bottle.request.json
+    return data[name]
+
+
+def json_result():
+    return bottle.request.json
 
 # @bottle.error(404)
 # @bottle.error(400)
@@ -379,7 +382,7 @@ def listar_tipoarea():
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl FROM "Agenda".tipoarea; """
+        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl FROM "Agenda".tipoarea ORDER BY id ASC; """
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -402,7 +405,8 @@ def listar_tipoarea_id(id):
 
         sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl
                   FROM "Agenda".tipoarea
-                  WHERE id = {0}; """.format(id)
+                  WHERE id = {0}
+                  ORDER BY id; """.format(id)
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -419,45 +423,51 @@ def listar_tipoarea_id(id):
 def agregar_tipoarea():
     """ agregar: tipoarea """
     # corkServer.require(fail_redirect="/")
-    #data = bottle.request.query
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
 
-    data = request.json()
-    print "Data = ", data
-
-
-    # descripcion = data['descripcion']
-    # bl = data['bl']
+    # print data
+    descripcion = data['descripcion']
+    bl = data['bl']
     today = datetime.datetime.today().strftime('%Y-%m-%d')
 
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ INSERT INTO "Agenda".tipoarea(fec_ing, bl, descripcion)
-                     VALUES ('{0}', {1}, '{2}');
-              """.format(today, 0, '')
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda".tipoarea', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda".tipoarea(id, fec_ing, bl, descripcion)
+                     VALUES ({0}, '{1}', {2}, '{3}');
+              """.format(new_id, today, bl, descripcion)
 
         cur.execute(sql)
-        # conn.commit()
+        conn.commit()
         cur.close()
         conn.close()
 
-        OP_STATUS['status'] = 1
+        response['OK'] = True
+        response['id'] = new_id
     except psycopg2.Error as error:
-        OP_STATUS['status'] = 0
-        OP_STATUS['message'] = 'error al insertar el registro a la base de datos'
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
         print 'ERROR: no se pudo insertar el registo ', error
 
-    return OP_STATUS
+    return response
 
 
-@bottle.route("/api/tipo_area/:id", method="PUT")
-def actualizar_tipoarea(id=0):
+@bottle.route("/api/tipo_area", method="PUT")
+def actualizar_tipoarea():
     """ actualizar: tipoarea """
 
     descripcion = json_get("descripcion")
     bl = json_get("bl")
-
+    id = json_get("id")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -480,18 +490,15 @@ def actualizar_tipoarea(id=0):
     return OP_STATUS
 
 
-@bottle.route("/api/tipo_area/:id", method="DELETE")
-def borrar_tipoarea(id):
+@bottle.route("/api/tipo_area", method="DELETE")
+def borrar_tipoarea():
     """ borrar: empleadoextension """
-
-    print "borrando"
-
+    id = json_result()
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
         sql = """ DELETE FROM "Agenda".tipoarea WHERE id = {0};""".format(id)
-        print sql
 
         cur.execute(sql)
         conn.commit()

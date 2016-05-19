@@ -14,7 +14,7 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
     },
 
     edit: function() {
-        //this.render();
+        this.render();
         this.$('.edit-tipoArea').hide();
         this.$('.delete-tipoArea').hide();
         this.$('.update-tipoArea').show();
@@ -46,7 +46,10 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
     },
 
     delete: function() {
-        this.model.destroy()
+        console.log("boton de eliminar presionado")
+        console.log(this.model)
+        this.model.destroy(this.model.id)
+        this.render()
     },
 
     template: _.template( contacts.utils.loadHtmlTemplate("TipoAreaReg") ),

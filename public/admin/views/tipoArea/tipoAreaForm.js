@@ -11,11 +11,18 @@ contacts.views.tipoAreaForm = Backbone.View.extend({
         var descripcion = this.$(".input-desc-tipoArea").val();
         var bl = this.$(".select-tipoArea-bl").val();
         var fec_ing = new Date().toJSON().slice(0, 10)
-        var tipo_area = new contacts.models.tipoArea();
-        tipo_area.set({"descripcion": descripcion, "bl": bl, "fec_ing": fec_ing});
-        this.collection.add(tipo_area)
-        console.log(this.collection)
-        tipo_area.save()
+
+        tipoArea = new contacts.models.tipoArea()
+        tipoArea.set({'descripcion': descripcion})
+        tipoArea.set({'fec_ing': fec_ing})
+        tipoArea.set({'bl': bl})
+
+        tipoArea.save().done(function(response){
+            id = response['id']
+            tipoArea.set({id: id })
+            self.collection.add(tipoArea)
+        })
+
     },
 
     template: _.template( contacts.utils.loadHtmlTemplate("TipoAreaForm") ),
