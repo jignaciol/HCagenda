@@ -5,10 +5,11 @@ from beaker.middleware import SessionMiddleware
 from cork import Cork
 from cork.backends import SQLiteBackend
 from cork.backends import SqlAlchemyBackend
+from contanst import BDP_IP, BDP_DBNAME, BDP_PASSWORD, BDP_USER
 
 
 def populate_backendPSQL():
-    b = SqlAlchemyBackend("postgresql+psycopg2://postgres:Ign2205@localhost/postgres", initialize=True)
+    b = SqlAlchemyBackend("postgresql+psycopg2://" + BDP_USER + ":" + BDP_PASSWORD + "@" + BDP_IP + "/" + BDP_DBNAME, initialize=True)
     return b
 
 
@@ -24,4 +25,3 @@ session_opts = {
     "session.type": "cookie",
     "session.validate_key": True,
 }
-

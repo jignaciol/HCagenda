@@ -78,7 +78,7 @@ else:
         data_BDP_USER = read_config_file_option(nameOptionBDP_USER, seccionBDP, fc)
 
         # clave para base de datos postgres
-        data_BDP_PASSWORD = read_environ_variable('Agenda_password')
+        data_BDP_PASSWORD = read_environ_variable('POSTGRES_PASSWORD')
 
         # SECCION: BOTTLE
         seccionBTL = 'BOTTLE'
