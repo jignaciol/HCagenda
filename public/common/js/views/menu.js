@@ -28,11 +28,13 @@ contacts.views.menuView = Backbone.View.extend({
     tipoArea: function() {
         console.log("boton tipo de area presionado")
         $("#btnTabsContacts").html("")
-        contacts.app.adminArea = new contacts.views.crudTipoArea({ el: $("#adminContainer") })
+        contacts.app.adminTipoArea = new contacts.views.crudTipoArea({ el: $("#adminContainer") })
     },
 
     tipoDatoContacto: function() {
         console.log("boton tipo dato contacto presionado")
+        $("#btnTabsContacts").html("")
+        contacts.app.adminDatoContacto = new contacts.views.crudDatoContacto({ el: $("#adminContainer") })
     },
 
     contactos: function() {

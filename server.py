@@ -422,13 +422,12 @@ def listar_tipoarea_id(id):
 @bottle.route('/api/tipo_area', method='POST')
 def agregar_tipoarea():
     """ agregar: tipoarea """
-    # corkServer.require(fail_redirect="/")
+    corkServer.require(fail_redirect="/")
     try:
         data = json_result()
     except ValueError:
         print "error capturando json"
 
-    # print data
     descripcion = data['descripcion']
     bl = data['bl']
     today = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -464,10 +463,15 @@ def agregar_tipoarea():
 @bottle.route("/api/tipo_area", method="PUT")
 def actualizar_tipoarea():
     """ actualizar: tipoarea """
+    corkServer.require(fail_redirect="/")
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
 
-    descripcion = json_get("descripcion")
-    bl = json_get("bl")
-    id = json_get("id")
+    descripcion = data["descripcion"]
+    bl = data["bl"]
+    id = data["id"]
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -481,18 +485,20 @@ def actualizar_tipoarea():
         cur.close()
         conn.close()
 
-        OP_STATUS['status'] = 1
+        response['OK'] = True
     except psycopg2.Error as error:
-        OP_STATUS['status'] = 0
-        OP_STATUS['message'] = 'error al intentar actualizar el registro en la base de datos'
+        OP_STATUS['OK'] = False
+        OP_STATUS['msg'] = 'error al intentar actualizar el registro en la base de datos'
         print 'ERROR: no se pudo actualizar el registo ', error
 
-    return OP_STATUS
+    return response
 
 
 @bottle.route("/api/tipo_area", method="DELETE")
 def borrar_tipoarea():
     """ borrar: empleadoextension """
+    corkServer.require(fail_redirect="/")
+
     id = json_result()
     try:
         conn = psycopg2.connect(DSN)
@@ -516,34 +522,151 @@ def borrar_tipoarea():
 # MODELO: tipodatocontacto #
 
 
-@bottle.route("api/tipodatocontacto/", method="GET")
+@bottle.route("/api/tipodatocontacto", method="GET")
 def listar_tipodatocontacto():
     """ listar todos: tipodatocontacto """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl FROM "Agenda"."tipoDatoContacto" ORDER BY id ASC; """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/tipodatocontacto/:id", method="GET")
+@bottle.route("/api/tipodatocontacto/:id", method="GET")
 def listar_tipodatocontacto_id(id):
     """ listar id:  tipodatocontacto """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl
+                  FROM "Agenda"."tipoDatoContacto"
+                  WHERE id = {0}
+                  ORDER BY id; """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/tipodatocontacto/", method="POST")
+@bottle.route("/api/tipodatocontacto", method="POST")
 def agregar_tipodatocontacto():
     """ agregar: tipodatocontacto """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    # print data
+    descripcion = data['descripcion'].encode('utf-8')
+    bl = data['bl']
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda"."tipoDatoContacto"', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda"."tipoDatoContacto"(id, descripcion, fec_ing, bl)
+                     VALUES ({0}, '{1}', '{2}', {3});
+              """.format(new_id, descripcion, today, bl)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/tipodatocontacto/:id", method="PUT")
+@bottle.route("/api/tipodatocontacto", method="PUT")
 def actualizar_tipodatocontacto(id=0):
     """ actualizar: tipodatocontacto """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"]
+    bl = data["bl"]
+    id = data["id"]
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda"."tipoDatoContacto"
+                  SET bl = {0}, descripcion = '{1}'
+                  WHERE id = {2};""".format(bl, descripcion, id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/tipodatocontacto/:id", method="DELETE")
-def borrar_tipodatocontacto(id=0):
+@bottle.route("/api/tipodatocontacto", method="DELETE")
+def borrar_tipodatocontacto():
     """ borrar: tipodatocontacto """
-    pass
+    # corkServer.require(fail_redirect="/")
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda"."tipoDatoContacto" WHERE id = {0};""".format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar borrar el registro en la base de datos'
+        print 'ERROR: no se pudo borrar el registo ', error
+
+    return response
+
 
 # MODELO: usuario #
 

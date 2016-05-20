@@ -5,7 +5,7 @@ from beaker.middleware import SessionMiddleware
 from cork import Cork
 from cork.backends import SQLiteBackend
 from cork.backends import SqlAlchemyBackend
-from contanst import BDP_IP, BDP_DBNAME, BDP_PASSWORD, BDP_USER
+from constants import BDP_IP, BDP_DBNAME, BDP_PASSWORD, BDP_USER
 
 
 def populate_backendPSQL():

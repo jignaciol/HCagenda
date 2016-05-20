@@ -14,7 +14,6 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
     },
 
     edit: function() {
-        this.render();
         this.$('.edit-tipoArea').hide();
         this.$('.delete-tipoArea').hide();
         this.$('.update-tipoArea').show();
@@ -36,8 +35,10 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
 
     update: function() {
         var self = this;
-        this.model.set('descripcion', this.$('.descripcion-update').val());
-        this.model.set('bl', this.$('.data-estado-area').val());
+        this.model.set({
+            'descripcion': this.$('.descripcion-update').val(),
+            'bl': this.$('.data-estado-area').val()
+        })
         this.model.save({}, {
             success: function(){
                 self.render();
@@ -46,9 +47,10 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
     },
 
     delete: function() {
-        console.log("boton de eliminar presionado")
-        console.log(this.model)
-        this.model.destroy(this.model.id)
+        this.model.destroy({
+            data: this.model.id,
+            contentType: "application/json"
+        })
         this.render()
     },
 
