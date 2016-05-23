@@ -49,6 +49,22 @@ WHERE id_departamento = 41;
 
 
 
+SELECT id, descripcion, fec_ing, bl, id_tipo_area
+  FROM "Agenda"."Area";
+
+
+SELECT id, descripcion, fec_ing, bl
+  FROM "Agenda".tipoArea;
+
+
+SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl,
+        ta.id as id_tipo_area, ta.descripcion as tipo_area
+FROM "Agenda"."Area" a
+LEFT JOIN "Agenda".tipoArea ta ON a.id_tipo_area = ta.id
+ORDER BY a.id ASC; 
+
+
+
 
 
 ***UPDATE***

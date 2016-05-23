@@ -214,16 +214,56 @@ def borrar_empleado(id=0):
 # CODIGO PARA MODELO AREA #
 
 
-@bottle.route("api/area/", method="GET")
+@bottle.route("/api/area", method="GET")
 def listar_areas():
     """ funcion para listar todas las areas """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl,
+                  ta.id as id_tipo_area, ta.descripcion as tipo_area
+                  FROM "Agenda"."Area" a
+                  LEFT JOIN "Agenda".tipoArea ta ON a.id_tipo_area = ta.id
+                  ORDER BY a.id ASC; """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/area/:id", method="GET")
+@bottle.route("/api/area/:id", method="GET")
 def listar_area_id(id):
     """ funcion para listar un area segun el id enviado """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl,
+                  ta.id as id_tipo_area, ta.descripcion as tipo_area
+                  FROM "Agenda"."Area" a
+                  LEFT JOIN "Agenda".tipoArea ta ON a.id_tipo_area = ta.id
+
+                  WHERE a.id = {0}
+                  ORDER BY a.id ASC; """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
 @bottle.route("api/area/", method="POST")
@@ -377,7 +417,7 @@ def borrar_empleadoextension(id=0):
 @bottle.route("/api/tipo_area", method="GET")
 def listar_tipoarea():
     """ listar todos: tipoarea """
-    # corkServer.require(fail_redirect="/")
+    corkServer.require(fail_redirect="/")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
