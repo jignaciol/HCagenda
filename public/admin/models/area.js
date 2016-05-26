@@ -6,23 +6,10 @@ contacts.models.area = Backbone.Model.extend({
 
     defaults: {
         descripcion: "",
-        fec_ing: "",
+        bl: 1,
+        id_tipo_area: 0,
         tipo_area: "",
-        bl: 1
-    },
-
-    /*
-    relations: [
-        {
-            type: Backbone.HasOne,
-            key: "id_tipo_area",
-            relatedModel: contacts.models.tipoarea,
-            reverseRelation: {
-                key: "id",
-                includeInJSON: "id"
-            }
-        }
-    ]
-    */
+        fec_ing: ""
+    }
 
 })

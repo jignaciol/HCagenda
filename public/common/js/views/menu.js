@@ -61,6 +61,9 @@ contacts.views.menuView = Backbone.View.extend({
 
     departamentos: function() {
         console.log("boton departamentos presionado")
+        $("#btnTabsContacts").html("")
+
+        contacts.app.admindpto = new contacts.views.crudDepartamento({ el: $("#adminContainer") })
     },
 
     smsIndividual: function() {

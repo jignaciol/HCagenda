@@ -222,10 +222,10 @@ def listar_areas():
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl,
-                  ta.id as id_tipo_area, ta.descripcion as tipo_area
+        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl, a.id_tipo_area,
+                  ta.descripcion as tipo_area
                   FROM "Agenda"."Area" a
-                  LEFT JOIN "Agenda".tipoArea ta ON a.id_tipo_area = ta.id
+                  LEFT JOIN "Agenda".tipoarea ta ON ta.id = a.id_tipo_area
                   ORDER BY a.id ASC; """
         cur.execute(sql)
         records = cur.fetchall()
@@ -247,13 +247,12 @@ def listar_area_id(id):
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl,
-                  ta.id as id_tipo_area, ta.descripcion as tipo_area
+        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl, a.id_tipo_area,
+                  ta.descripcion as tipo_area
                   FROM "Agenda"."Area" a
-                  LEFT JOIN "Agenda".tipoArea ta ON a.id_tipo_area = ta.id
+                  LEFT JOIN "Agenda".tipoarea ta ON ta.id = a.id_tipo_area
+                  ORDER BY a.id ASC; """
 
-                  WHERE a.id = {0}
-                  ORDER BY a.id ASC; """.format(id)
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -266,51 +265,139 @@ def listar_area_id(id):
     return json_result
 
 
-@bottle.route("api/area/", method="POST")
+@bottle.route("/api/area", method="POST")
 def agregar_area():
     """ funcion para agregar un empleado a la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data['descripcion']
+    bl = data['bl']
+    id_tipo_area = data['id_tipo_area']
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda"."Area"', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda"."Area"(id, descripcion, fec_ing, bl, id_tipo_area)
+                     VALUES ({0}, '{1}', '{2}', {3}, {4});
+              """.format(new_id, descripcion, today, bl, id_tipo_area)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/area/:id", method="PUT")
+@bottle.route("/api/area", method="PUT")
 def actualizar_area(id=0):
     """ funcion para actualizar los datos de un area en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"]
+    bl = data["bl"]
+    id = data["id"]
+    id_tipo_area = data["id_tipo_area"]
+
+    print id_tipo_area
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda"."Area"
+                  SET bl = {0}, descripcion = '{1}', id_tipo_area = {2}
+                  WHERE id = {3};""".format(bl, descripcion, id_tipo_area, id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        OP_STATUS['OK'] = False
+        OP_STATUS['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/area/:id", method="DELETE")
+@bottle.route("/api/area", method="DELETE")
 def borrar_area(id=0):
     """ funcion para borrar un empleado en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda"."Area" WHERE id = {0};""".format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = "error al intentar borrar el registro en la base de datos"
+        print "ERROR: no se pudo borrar el registo -->", error
+
+    return response
+
 
 # CODIGO PARA MODELO EXTENSION #
 
 
-@bottle.route("api/extension/", method="GET")
+@bottle.route("/api/extension", method="GET")
 def listar_extensiones():
     """ funcion para listar todas los registros de las extensiones """
     pass
 
 
-@bottle.route("api/extension/:id", method="GET")
+@bottle.route("/api/extension/:id", method="GET")
 def listar_extension_id(id):
     """ funcion para listar una extension segun el id enviado """
     pass
 
 
-@bottle.route("api/extension/", method="POST")
+@bottle.route("/api/extension", method="POST")
 def agregar_extension():
     """ funcion para agregar una extension a la base de datos """
     pass
 
 
-@bottle.route("api/extension/:id", method="PUT")
+@bottle.route("/api/extension", method="PUT")
 def actualizar_extension(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
     pass
 
 
-@bottle.route("api/extension/:id", method="DELETE")
+@bottle.route("/api/extension", method="DELETE")
 def borrar_extension(id=0):
     """ funcion para borrar una extension en la base de datos """
     pass
@@ -318,13 +405,13 @@ def borrar_extension(id=0):
 # CODIGO PARA MODELO DATOS DE CONTACTO #
 
 
-@bottle.route("api/datoscontacto/", method="GET")
+@bottle.route("/api/datoscontacto", method="GET")
 def listar_datosContacto():
     """ funcion para listar todas los registros de los datos de contacto """
     pass
 
 
-@bottle.route("api/datoscontacto/:id", method="GET")
+@bottle.route("/api/datoscontacto", method="GET")
 def listar_datoscontacto_id(id):
     """ funcion para listar datoscontacto segun el id enviado """
     pass
@@ -350,10 +437,17 @@ def borrar_datoscontacto(id=0):
 # metodos REST para modelo departamento #
 
 
-@bottle.route("api/departamento/", method="GET")
+@bottle.route("/api/departamento", method="GET")
 def listar_departamento():
     """ funcion para listar todas los registros de los departamentos """
-    pass
+    sql = """
+            SELECT  d.id, d.descripcion, d.fec_ing, d.bl,
+                   a.id as id_ubicacion, a.descripcion as ubicacion,
+                    b.id as id_piso, b.descripcion as piso
+            FROM "Agenda"."departamento" d
+            LEFT JOIN "Agenda"."Area" a ON a.id=d.id_ubicacion and a.id_tipo_area=1
+            LEFT JOIN "Agenda"."Area" b ON b.id=d.id_piso and b.id_tipo_area=2;
+        """
 
 
 @bottle.route("api/departamento/:id", method="GET")

@@ -1,6 +1,6 @@
 var contacts = contacts || {}
 
-contacts.views.areaForm = Backbone.View.extend({
+contacts.views.departamentoForm = Backbone.View.extend({
 
     events: {
         "click .btn-agrega-area": "addArea"
@@ -25,19 +25,19 @@ contacts.views.areaForm = Backbone.View.extend({
 
     },
 
-    template: _.template( contacts.utils.loadHtmlTemplate("areaForm") ),
+    template: _.template( contacts.utils.loadHtmlTemplate("departamentoForm") ),
 
     render: function() {
         this.$el.html( this.template() )
-        this.cargaCombo()
+        this.cargaUbicacion()
         return this
     },
 
-    cargaCombo: function(){
-        objetivo = this.$(".selectTipoArea")
+    cargaUbicacion: function(){
+        objetivo = this.$(".selectUbicacion")
         status = "enable"
         seleccionado = 0
-        contacts.utils.loadSelectTipoArea(seleccionado, status, objetivo)
+        contacts.utils.loadSelectUbicacion(seleccionado, status, objetivo)
     },
 
     initialize: function() {

@@ -233,3 +233,21 @@ WITH (
 ALTER TABLE "Agenda"."menuUsuario"
   OWNER TO postgres;
 
+
+
+
+SELECT  d.id, d.descripcion, d.fec_ing, d.bl,
+	a.id as id_ubicacion, a.descripcion as ubicacion,
+	b.id as id_piso, b.descripcion as piso
+FROM "Agenda"."departamento" d
+LEFT JOIN "Agenda"."Area" a ON a.id=d.id_ubicacion and a.id_tipo_area=1
+LEFT JOIN "Agenda"."Area" b ON b.id=d.id_piso and b.id_tipo_area=2;
+
+
+
+
+SELECT * FROM "Agenda"."Area";
+SELECT * FROM "Agenda"."departamento";
+
+
+delete from "Agenda"."Area" WHERE id = 18;

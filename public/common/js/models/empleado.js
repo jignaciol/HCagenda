@@ -1,8 +1,8 @@
 var contacts = contacts || {};
 
-contacts.models.empleado = Backbone.RelationalModel.extend({
+contacts.models.empleado = Backbone.Model.extend({
 
-    urlRoot: "empleado/",
+    urlRoot: "/api/empleado",
 
     idAttribute: "id_empleado",
 
@@ -15,16 +15,6 @@ contacts.models.empleado = Backbone.RelationalModel.extend({
         indicador: '',
         fecha_nac: '',
         fecha_ing: ''
-    },
-
-    relations: [{
-        type: Backbone.HasOne,
-        key: "id_departamento",
-        relatedModel: contacts.models.departamento,
-        reverseRelation: {
-            key: "id",
-            includeInJSON: "id"
-        }
-    }]
+    }
 
 });
