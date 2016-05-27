@@ -30,6 +30,8 @@ contacts.views.departamentoForm = Backbone.View.extend({
     render: function() {
         this.$el.html( this.template() )
         this.cargaUbicacion()
+        this.cargaPiso()
+        this.cargaBL()
         return this
     },
 
@@ -37,8 +39,25 @@ contacts.views.departamentoForm = Backbone.View.extend({
         objetivo = this.$(".selectUbicacion")
         status = "enable"
         seleccionado = 0
-        contacts.utils.loadSelectUbicacion(seleccionado, status, objetivo)
+        tipoArea = 1
+        contacts.utils.loadSelectArea(seleccionado, status, objetivo, tipoArea)
     },
+
+    cargaPiso: function(){
+        objetivo = this.$(".selectPiso")
+        status = "enable"
+        seleccionado = 0
+        tipoArea = 2
+        contacts.utils.loadSelectArea(seleccionado, status, objetivo, tipoArea)
+    },
+
+    cargaBL: function(){
+        objetivo = this.$(".selectEstado")
+        status = "enable"
+        seleccionado = 0
+        contacts.utils.loadSelectBL(seleccionado, status, objetivo)
+    },
+
 
     initialize: function() {
         this.render()

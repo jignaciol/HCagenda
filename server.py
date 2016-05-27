@@ -434,6 +434,73 @@ def borrar_datoscontacto(id=0):
     """ funcion para borrar una extension en la base de datos """
     pass
 
+# motodos REST para modelo borrado_logico #
+
+
+@bottle.route("/api/borradologico", method="GET")
+def listar_opciones():
+    """ funcion para listar todas las opciones de borrado logico """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT b.id, b.descripcion
+                  FROM "Agenda".borrado_logico b
+                  ORDER BY b.id ASC; """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("/api/borradologico/:id", method="GET")
+def listar_opciones_id(id=0):
+    """ funcion para listar una opcion de borrado logico segun el id """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT b.id, b.descripcion
+                  FROM "Agenda".borrado_logico b
+                  WHERE b.id={0}
+                  ORDER BY b.id ASC; """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("/api/borradologico", method="POST")
+def agregar_opcion():
+    """ funcion para agregar una opciond de borrado en la base de datos """
+    pass
+
+
+@bottle.route("/api/borradologico", method="PUT")
+def actualizar_opcion(id=0):
+    """ funcion para actualizar los datos de una opcion de borrado en la base de datos """
+    pass
+
+
+@bottle.route("/api/borradologico", method="DELETE")
+def borrar_opcion(id=0):
+    """ funcion para borrar una opcion de borrado logico en la base de datos """
+    pass
+
 # metodos REST para modelo departamento #
 
 

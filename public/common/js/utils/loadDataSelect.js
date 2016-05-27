@@ -9,7 +9,7 @@ contacts.utils.loadSelectTipoArea = function(seleccionado, status, objetivo){
             if(seleccionado == tipoArea["id"]) {
                  html_select += "<option value='" + tipoArea["id"] + "' selected='selected' >" + tipoArea["descripcion"] + "</option>"
             }else{
-                html_select += "<option value='" + tipoArea["id"] + "'>" + tipoArea["descripcion"] + "</option>"
+                 html_select += "<option value='" + tipoArea["id"] + "'>" + tipoArea["descripcion"] + "</option>"
             }
         })
         html_select += "</select>"
@@ -18,17 +18,38 @@ contacts.utils.loadSelectTipoArea = function(seleccionado, status, objetivo){
 
 }
 
-contacts.utils.loadSelectUbicacion = function(seleccionado, status, objetivo){
+contacts.utils.loadSelectArea = function(seleccionado, status, objetivo, tipoArea){
 
-    listaUbicacion = new contacts.collections.listaArea()
+    listaAreas = new contacts.collections.listaArea()
 
-    listaUbicacion.fetch().done(function(filtered){
+    listaAreas.fetch().done(function(lista){
         html_select = "<select id='' class='form-control select-ubicacion' " + status + ">"
-        filtered.forEach(function(ubicacion){
-            if(seleccionado == ubicacion["id"]){
-                html_select += "<option value='" + ubicacion["id"] + "' selected='selected' >" + ubicacion["descripcion"] + "</option>"
+        lista.forEach(function(area){
+            if(area["id_tipo_area"]==tipoArea){
+                if(seleccionado == area["id"]){
+                    html_select += "<option value='" + area["id"] + "' selected='selected' >" + area["descripcion"] + "</option>"
+                } else {
+                    html_select += "<option value='" + area["id"] + "'>" + area["descripcion"] + "</option>"
+                }
+            }
+        })
+        html_select += "</select>"
+        $(objetivo).html(html_select)
+    })
+
+}
+
+contacts.utils.loadSelectBL = function(seleccionado, status, objetivo){
+
+    listaBL = new contacts.collections.listaBorradoLogico()
+
+    listaBL.fetch().done(function(lista){
+        html_select = "<select id='' class='form-control select-bl' " + status + ">"
+        lista.forEach(function(codigo){
+            if(seleccionado == codigo["id"]){
+                html_select += "<option value='" + codigo["id"] + "' selected='selected' >" + codigo["descripcion"] + "</option>"
             } else {
-                html_select += "<option value='" + ubicacion["id"] + "'>" + ubicacion["descripcion"] + "</option>"
+                html_select += "<option value='" + codigo["id"] + "'>" + codigo["descripcion"] + "</option>"
             }
         })
         html_select += "</select>"
