@@ -44,10 +44,10 @@ contacts.views.areaReg = Backbone.View.extend({
     update: function() {
         self = this
         this.model.set({
-            "descripcion": this.$(".descripcion-update").val(),
-            "id_tipo_area": this.$(".select-tipoArea").val(),
-            "tipo_area": this.$(".select-tipoArea option:selected").html(),
-            "bl": this.$(".data-estado").val()
+            descripcion: this.$(".descripcion-update").val(),
+            id_tipo_area: this.$(".select-tipoArea").val(),
+            tipo_area: this.$(".select-tipoArea option:selected").html(),
+            bl: this.$(".select-bl").val()
         })
         this.model.save({
             success: function() {

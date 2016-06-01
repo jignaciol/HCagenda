@@ -22,7 +22,6 @@ contacts.views.areaForm = Backbone.View.extend({
             area.set({id: id })
             self.collection.add(area)
         })
-
     },
 
     template: _.template( contacts.utils.loadHtmlTemplate("areaForm") ),

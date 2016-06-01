@@ -8,7 +8,7 @@ contacts.views.crudDepartamento = Backbone.View.extend({
         this.$el.html( this.template() )
         this.collection = new contacts.collections.listaDepartamento()
         var departamentoForm = new contacts.views.departamentoForm({ el: this.$("#AreaForm"), collection: this.collection })
-        //var areaList = new contacts.views.areaList({ el: this.$("#AreaListBody"), collection: this.collection })
+        var departamentoList = new contacts.views.departamentoList({ el: this.$("#AreaListBody"), collection: this.collection })
     },
 
     initialize: function() {

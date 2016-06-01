@@ -7,33 +7,33 @@ contacts.views.departamentoReg = Backbone.View.extend({
     className: "list-group-item",
 
     events: {
-        "click .edit-departamento": "edit",
-        "click .delete-departamento": "delete",
-        "click .update-departamento": "update",
-        "click .cancel-departamento": "cancel",
+        "click .edit-dpto": "edit",
+        "click .delete-dpto": "delete",
+        "click .update-dpto": "update",
+        "click .cancel-dpto": "cancel",
     },
 
     edit: function() {
-        this.$(".edit-departamento").hide();
-        this.$(".delete-departamento").hide();
-        this.$(".update-departamento").show();
-        this.$(".cancel-departamento").show();
+        this.$(".edit-dpto").hide()
+        this.$(".delete-dpto").hide()
+        this.$(".update-dpto").show()
+        this.$(".cancel-dpto").show()
 
-        var descripcion = this.$('.descripcion-departamento').html()
-        var tipo_area = this.$(".descripcion-tipo-departamento").html()
+        var descripcion = this.$('.descripcion').html()
 
-        status = "enable"
-        objetivo = this.$(".descripcion-tipo-departamento")
-        id_tipo_area = this.model.get("id_tipo_area")
-        contacts.utils.loadSelectTipoArea(id_tipo_area, status, objetivo)
+        objetivo = this.$(".ubicacion")
+        id_ubicacion = this.model.get("id_ubicacion")
+        contacts.utils.loadSelectArea(id_ubicacion, "enable", objetivo, 1)
 
-        this.$('.descripcion-departamento').html('<input name="descripcion" type="text" class="form-control descripcion-update" value="' + descripcion + '">');
+        objetivo = this.$(".piso")
+        id_piso = this.model.get("id_piso")
+        contacts.utils.loadSelectArea(id_piso, "enable", objetivo, 2)
 
-        if (this.model.get('bl') == 0) {
-            this.$(".estado-departamento").html('<select name="bl" class="form-control data-estado"> <option value="0" selected="selected">Oculto</option> <option value="1">Visible</option> </select>');
-        } else {
-            this.$(".estado-departamento").html('<select name="bl" class="form-control data-estado"> <option value="0">Oculto</option> <option value="1" selected="selected">Visible</option> </select>');
-        }
+        objetivo = this.$(".estado")
+        bl = this.model.get("bl")
+        contacts.utils.loadSelectBL(bl, "enable", objetivo, 2)
+
+        this.$('.descripcion').html('<input name="descripcion" type="text" class="form-control descripcion-update small" value="' + descripcion + '">');
 
     },
 
@@ -44,10 +44,14 @@ contacts.views.departamentoReg = Backbone.View.extend({
     update: function() {
         self = this
         this.model.set({
-            "descripcion": this.$(".descripcion-update").val(),
-            "id_tipo_area": this.$(".select-tipoArea").val(),
-            "tipo_area": this.$(".select-tipoArea option:selected").html(),
-            "bl": this.$(".data-estado").val()
+            descripcion: this.$(".descripcion-update").val(),
+            bl: this.$(".select-bl").val(),
+            estado: this.$(".select-bl option:selected").html(),
+            id_piso: this.$(".select-ubicacion_2").val(),
+            piso: this.$(".select-ubicacion_2 option:selected").html(),
+            alias: "",
+            id_ubicacion: this.$(".select-ubicacion_1").val(),
+            ubicacion: this.$(".select-ubicacion_1 option:selected").html()
         })
         this.model.save({
             success: function() {

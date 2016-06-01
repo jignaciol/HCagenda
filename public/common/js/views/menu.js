@@ -57,12 +57,13 @@ contacts.views.menuView = Backbone.View.extend({
 
     extensiones: function() {
         console.log("boton extensiones presionado")
+        $("#btnTabsContacts").html("")
+        contacts.app.adminExtensiones = new contacts.views.extensionesCrud({ el: $("#adminContainer") })
     },
 
     departamentos: function() {
         console.log("boton departamentos presionado")
         $("#btnTabsContacts").html("")
-
         contacts.app.admindpto = new contacts.views.crudDepartamento({ el: $("#adminContainer") })
     },
 

@@ -23,7 +23,7 @@ contacts.utils.loadSelectArea = function(seleccionado, status, objetivo, tipoAre
     listaAreas = new contacts.collections.listaArea()
 
     listaAreas.fetch().done(function(lista){
-        html_select = "<select id='' class='form-control select-ubicacion' " + status + ">"
+        html_select = "<select id='' class='form-control select-ubicacion_" + tipoArea + "' " + status + ">"
         lista.forEach(function(area){
             if(area["id_tipo_area"]==tipoArea){
                 if(seleccionado == area["id"]){
@@ -47,9 +47,9 @@ contacts.utils.loadSelectBL = function(seleccionado, status, objetivo){
         html_select = "<select id='' class='form-control select-bl' " + status + ">"
         lista.forEach(function(codigo){
             if(seleccionado == codigo["id"]){
-                html_select += "<option value='" + codigo["id"] + "' selected='selected' >" + codigo["descripcion"] + "</option>"
+                html_select += "<option value=" + codigo["id"] + " selected='selected' >" + codigo["descripcion"] + "</option>"
             } else {
-                html_select += "<option value='" + codigo["id"] + "'>" + codigo["descripcion"] + "</option>"
+                html_select += "<option value=" + codigo["id"] + ">" + codigo["descripcion"] + "</option>"
             }
         })
         html_select += "</select>"

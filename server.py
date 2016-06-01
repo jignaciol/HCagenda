@@ -16,10 +16,6 @@ DSN = DSN.format(BDP_IP, BDP_PORT, BDP_DBNAME, BDP_USER, BDP_PASSWORD)
 
 SERVER = bottle.app()
 
-# CONSTANTES #
-OP_STATUS = {'status': 0, 'message': ''}
-response = {'OK': False, 'msg': ''}
-
 # En caso de recibir un json a traves de post :: utilizar request.json :P
 
 # ruta de acceso para archivos estaticos
@@ -56,6 +52,7 @@ def json_result():
 @bottle.route("/fotos/<filename:path>")
 def static_images(filename):
     """ Funcion que busca las imagenes de los empleados """
+    response = {"OK": False, "msg": ""}
     try:
         img = bottle.static_file(filename, root="../Fotos")
         return img
@@ -95,7 +92,7 @@ def listar_extensions():
         sql = """
                 SELECT  ext.id, ext.numero, ext.modelo,
                         ext.id_departamento, d.descripcion
-                FROM "Agenda"."Extension" ext
+                FROM "Agenda"."extension" ext
                 LEFT JOIN "Agenda".departamento d ON d.id = ext.id_departamento
               """
 
@@ -132,7 +129,7 @@ def listar_empleados():
                        dct.descripcion as habitacion
                 FROM "Agenda".empleado e
                 LEFT JOIN "Agenda"."empleadoExtension" epx ON epx.id_empleado = e.id
-                LEFT JOIN "Agenda"."Extension" ext ON ext.id = epx.id_extension
+                LEFT JOIN "Agenda"."extension" ext ON ext.id = epx.id_extension
                 LEFT JOIN "Agenda"."departamento" d ON d.id = e.id_departamento
                 LEFT JOIN "Agenda"."datosContacto" dcc ON dcc.id_empleado = e.id and dcc.id_tipo_contacto = 2
                 LEFT JOIN "Agenda"."datosContacto" dcm ON dcm.id_empleado = e.id and dcm.id_tipo_contacto = 3
@@ -269,6 +266,7 @@ def listar_area_id(id):
 def agregar_area():
     """ funcion para agregar un empleado a la base de datos """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
     try:
         data = json_result()
     except ValueError:
@@ -311,6 +309,7 @@ def agregar_area():
 def actualizar_area(id=0):
     """ funcion para actualizar los datos de un area en la base de datos """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
     try:
         data = json_result()
     except ValueError:
@@ -321,7 +320,6 @@ def actualizar_area(id=0):
     id = data["id"]
     id_tipo_area = data["id_tipo_area"]
 
-    print id_tipo_area
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -335,10 +333,10 @@ def actualizar_area(id=0):
         cur.close()
         conn.close()
 
-        response['OK'] = True
+        response["OK"] = True
     except psycopg2.Error as error:
-        OP_STATUS['OK'] = False
-        OP_STATUS['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        response["OK"] = False
+        response["msg"] = 'error al intentar actualizar el registro en la base de datos'
         print 'ERROR: no se pudo actualizar el registo ', error
 
     return response
@@ -348,7 +346,7 @@ def actualizar_area(id=0):
 def borrar_area(id=0):
     """ funcion para borrar un empleado en la base de datos """
     corkServer.require(fail_redirect="/")
-
+    response = {"OK": False, "msg": ""}
     id = json_result()
     try:
         conn = psycopg2.connect(DSN)
@@ -446,7 +444,7 @@ def listar_opciones():
         cur = conn.cursor()
 
         sql = """ SELECT b.id, b.descripcion
-                  FROM "Agenda".borrado_logico b
+                  FROM "Agenda"."borradoLogico" b
                   ORDER BY b.id ASC; """
         cur.execute(sql)
         records = cur.fetchall()
@@ -469,7 +467,7 @@ def listar_opciones_id(id=0):
         cur = conn.cursor()
 
         sql = """ SELECT b.id, b.descripcion
-                  FROM "Agenda".borrado_logico b
+                  FROM "Agenda"."borradoLogico" b
                   WHERE b.id={0}
                   ORDER BY b.id ASC; """.format(id)
         cur.execute(sql)
@@ -507,38 +505,177 @@ def borrar_opcion(id=0):
 @bottle.route("/api/departamento", method="GET")
 def listar_departamento():
     """ funcion para listar todas los registros de los departamentos """
-    sql = """
-            SELECT  d.id, d.descripcion, d.fec_ing, d.bl,
-                   a.id as id_ubicacion, a.descripcion as ubicacion,
-                    b.id as id_piso, b.descripcion as piso
-            FROM "Agenda"."departamento" d
-            LEFT JOIN "Agenda"."Area" a ON a.id=d.id_ubicacion and a.id_tipo_area=1
-            LEFT JOIN "Agenda"."Area" b ON b.id=d.id_piso and b.id_tipo_area=2;
-        """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                 SELECT  d.id, d.descripcion, to_char(d.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                        a.id as id_ubicacion, a.descripcion as ubicacion,
+                        b.id as id_piso, b.descripcion as piso,
+                        bl.id as bl, bl.descripcion as estado
+                 FROM "Agenda"."departamento" d
+                 LEFT JOIN "Agenda"."Area" a ON a.id=d.id_ubicacion and a.id_tipo_area=1
+                 LEFT JOIN "Agenda"."Area" b ON b.id=d.id_piso and b.id_tipo_area=2
+                 LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = d.bl
+                 ORDER BY d.id asc;
+            """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/departamento/:id", method="GET")
+@bottle.route("/api/departamento/:id", method="GET")
 def listar_departamento_id(id):
     """ funcion para listar departamento segun el id enviado """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                 SELECT  d.id, d.descripcion, to_char(d.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                        a.id as id_ubicacion, a.descripcion as ubicacion,
+                        b.id as id_piso, b.descripcion as piso,
+                        bl.id as bl, bl.descripcion as estado
+                 FROM "Agenda"."departamento" d
+                 LEFT JOIN "Agenda"."Area" a ON a.id=d.id_ubicacion and a.id_tipo_area=1
+                 LEFT JOIN "Agenda"."Area" b ON b.id=d.id_piso and b.id_tipo_area=2
+                 LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = d.bl
+                 WHERE d.id = {0}
+                 ORDER BY d.id asc;
+              """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print "ERROR: no se pudo realizar la conexion: ", error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/departamento/", method="POST")
+@bottle.route("/api/departamento", method="POST")
 def agregar_departamento():
     """ funcion para agregar un departamento a la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"]
+    bl = data["bl"]
+    id_ubicacion = data["id_ubicacion"]
+    id_piso = data["id_piso"]
+    alias = data["alias"]
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda".departamento', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda".departamento(id, descripcion, fec_ing, bl, id_ubicacion, id_piso, alias)
+                     VALUES ({0}, '{1}', '{2}', {3}, {4}, {5}, '{6}');
+              """.format(new_id, descripcion, today, bl, id_ubicacion, id_piso, alias)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/departamento/:id", method="PUT")
+@bottle.route("/api/departamento/:id", method="PUT")
 def actualizar_departamento(id=0):
     """ funcion para actualizar los datos de un departamento en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"].encode('utf-8')
+    bl = data["bl"]
+    id_ubicacion = data["id_ubicacion"]
+    id_piso = data["id_piso"]
+    alias = data["alias"]
+    # id = data["id"]
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda".departamento
+                  SET descripcion = '{0}',
+                      bl = {1},
+                      id_ubicacion = {2},
+                      id_piso = {3},
+                      alias = '{4}'
+                  WHERE id = {5};
+               """.format(descripcion, bl, id_ubicacion, id_piso, alias, id)
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/departamento/:id", method="DELETE")
+@bottle.route("/api/departamento/:id", method="DELETE")
 def borrar_departamento(id=0):
     """ funcion para borrar un departamento en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda".departamento WHERE id={0};""".format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = 'error al intentar borrar el registro en la base de datos'
+        print 'ERROR: no se pudo borrar el registo ', error
+
+    return response
 
 # MODELO: empleadoextension #
 
@@ -624,6 +761,7 @@ def listar_tipoarea_id(id):
 def agregar_tipoarea():
     """ agregar: tipoarea """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
     try:
         data = json_result()
     except ValueError:
@@ -665,6 +803,7 @@ def agregar_tipoarea():
 def actualizar_tipoarea():
     """ actualizar: tipoarea """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
     try:
         data = json_result()
     except ValueError:
@@ -686,10 +825,10 @@ def actualizar_tipoarea():
         cur.close()
         conn.close()
 
-        response['OK'] = True
+        response["OK"] = True
     except psycopg2.Error as error:
-        OP_STATUS['OK'] = False
-        OP_STATUS['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        response["OK"] = False
+        response["msg"] = 'error al intentar actualizar el registro en la base de datos'
         print 'ERROR: no se pudo actualizar el registo ', error
 
     return response
@@ -699,7 +838,7 @@ def actualizar_tipoarea():
 def borrar_tipoarea():
     """ borrar: empleadoextension """
     corkServer.require(fail_redirect="/")
-
+    response = {"OK": False, "msg": ""}
     id = json_result()
     try:
         conn = psycopg2.connect(DSN)
@@ -712,13 +851,13 @@ def borrar_tipoarea():
         cur.close()
         conn.close()
 
-        OP_STATUS['status'] = 1
+        response["OK"] = True
     except psycopg2.Error as error:
-        OP_STATUS['status'] = 0
-        OP_STATUS['message'] = 'error al intentar borrar el registro en la base de datos'
+        response["OK"] = 0
+        response["msg"] = 'error al intentar borrar el registro en la base de datos'
         print 'ERROR: no se pudo borrar el registo ', error
 
-    return OP_STATUS
+    return response
 
 # MODELO: tipodatocontacto #
 
@@ -772,6 +911,7 @@ def listar_tipodatocontacto_id(id):
 def agregar_tipodatocontacto():
     """ agregar: tipodatocontacto """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
     try:
         data = json_result()
     except ValueError:
@@ -814,6 +954,7 @@ def agregar_tipodatocontacto():
 def actualizar_tipodatocontacto(id=0):
     """ actualizar: tipodatocontacto """
     corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
     try:
         data = json_result()
     except ValueError:
@@ -847,7 +988,8 @@ def actualizar_tipodatocontacto(id=0):
 @bottle.route("/api/tipodatocontacto", method="DELETE")
 def borrar_tipodatocontacto():
     """ borrar: tipodatocontacto """
-    # corkServer.require(fail_redirect="/")
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
     id = json_result()
     try:
         conn = psycopg2.connect(DSN)
@@ -960,14 +1102,16 @@ def borrar_menuopcion(id=0):
 @bottle.post("/login")
 def login():
     """ usuarios registrados """
+    response = {"OK": False, "msg": ""}
+
     username = unicode(post_get("username"), "utf-8")
     password = unicode(post_get("password"), "utf-8")
     if corkServer.login(username, password):
-        response['OK'] = True
-        response['msg'] = "login exitoso!"
+        response["OK"] = True
+        response["msg"] = "login exitoso!"
     else:
-        response['OK'] = False
-        response['msg'] = "error de autenticación"
+        response["OK"] = False
+        response["msg"] = "error de autenticación"
 
     return response
 

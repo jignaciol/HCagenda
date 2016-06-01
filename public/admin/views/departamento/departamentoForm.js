@@ -3,24 +3,30 @@ var contacts = contacts || {}
 contacts.views.departamentoForm = Backbone.View.extend({
 
     events: {
-        "click .btn-agrega-area": "addArea"
+        "click .btn-agrega-dpto": "addDepartamento"
     },
 
-    addArea: function() {
+    addDepartamento: function() {
         self = this
-        area = new contacts.models.area()
-        area.set({
-            descripcion: this.$(".input-desc-area").val(),
-            id_tipo_area: this.$(".select-tipoArea").val(),
-            tipo_area: this.$(".select-tipoArea option:selected").html(),
+        departamento = new contacts.models.departamento()
+        departamento.set({
+            descripcion: this.$(".input-desc-dpto").val(),
+            id_ubicacion: this.$(".select-ubicacion_1").val(),
+            ubicacion: this.$(".select-ubicacion_1 option:selected").html(),
+            id_piso: this.$(".select-ubicacion_2").val(),
+            piso: this.$(".select-ubicacion_2 option:selected").html(),
             fec_ing: new Date().toJSON().slice(0, 10),
-            bl: this.$(".select-area-bl").val()
+            bl: this.$(".select-bl").val(),
+            estado: this.$(".select-bl option:selected").html(),
+            alias: ""
         })
 
-        area.save().done(function(response){
+        this.$(".input-desc-dpto").val("")
+
+        departamento.save().done(function(response){
             id = response['id']
-            area.set({id: id })
-            self.collection.add(area)
+            departamento.set({id: id })
+            self.collection.add(departamento)
         })
 
     },
@@ -57,7 +63,6 @@ contacts.views.departamentoForm = Backbone.View.extend({
         seleccionado = 0
         contacts.utils.loadSelectBL(seleccionado, status, objetivo)
     },
-
 
     initialize: function() {
         this.render()
