@@ -6,6 +6,8 @@ contacts.views.extensionesCrud = Backbone.View.extend({
 
    render: function(){
         this.$el.html(this.template())
+        this.collection = new contacts.collections.extensionList()
+        var extensionList = new contacts.views.extensionListView({ el: this.$("#listBody"), collection: this.collection })
    },
 
    initialize: function(){

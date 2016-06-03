@@ -374,13 +374,64 @@ def borrar_area(id=0):
 @bottle.route("/api/extension", method="GET")
 def listar_extensiones():
     """ funcion para listar todas los registros de las extensiones """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT e.id,
+                        d.id as id_departamento, d.descripcion as departamento,
+                        e.numero, to_char(e.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                        bl.id as bl, bl.descripcion as estado,
+                        e.csp, e.tipo, e.modelo,
+                        e.serial, mac_pos, e.grupo_captura, e.status, e.lim, e.fecha_inventario
+                  FROM "Agenda".extension e
+                  LEFT JOIN "Agenda".departamento d ON d.id = e.id_departamento
+                  LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = e.bl
+                  ORDER BY e.id asc;
+              """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
 @bottle.route("/api/extension/:id", method="GET")
 def listar_extension_id(id):
     """ funcion para listar una extension segun el id enviado """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ SELECT e.id,
+                        d.id as id_departamento, d.descripcion as departamento,
+                        e.numero, to_char(e.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                        bl.id as bl, bl.descripcion as estado,
+                        e.csp, e.tipo, e.modelo,
+                        e.serial, mac_pos, e.grupo_captura, e.status, e.lim, e.fecha_inventario
+                  FROM "Agenda".extension e
+                  LEFT JOIN "Agenda".departamento d ON d.id = e.id_departamento
+                  LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = e.bl
+                  WHERE e.id={0}
+                  ORDER BY e.id asc;
+              """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
 @bottle.route("/api/extension", method="POST")

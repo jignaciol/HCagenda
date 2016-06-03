@@ -1,6 +1,6 @@
 var contacts = contacts || {};
 
-contacts.models.Extension = Backbone.RelationalModel.extend({
+contacts.models.Extension = Backbone.Model.extend({
 
     urlRoot: "extensions/",
 

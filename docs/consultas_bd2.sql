@@ -251,3 +251,17 @@ SELECT * FROM "Agenda"."departamento";
 
 
 delete from "Agenda"."Area" WHERE id = 18;
+
+
+SELECT e.id,
+       d.id as id_departamento, d.descripcion as departamento,
+       e.numero, e.fec_ing,
+       bl.id as bl, bl.descripcion as estado,
+       e.csp, e.tipo, e.modelo, 
+       e.serial, mac_pos, e.grupo_captura, e.status, e.lim, e.fecha_inventario
+FROM "Agenda".extension e
+LEFT JOIN "Agenda".departamento d ON d.id = e.id_departamento
+LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = e.bl
+ORDER BY e.id;
+
+UPDATE "Agenda".extension SET 

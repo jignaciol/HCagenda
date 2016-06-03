@@ -1,6 +1,6 @@
 var contacts = contacts || {}
 
-contacts.models.tipoDatoContacto = Backbone.RelationalModel.extend({
+contacts.models.tipoDatoContacto = Backbone.Model.extend({
 
     url: "/api/tipodatocontacto",
 

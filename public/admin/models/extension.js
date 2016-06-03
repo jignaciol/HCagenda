@@ -1,9 +1,9 @@
 var contacts = contacts || {}
 
 
-contacts.models.extensiones = Backbone.Model.extend({
+contacts.models.extension = Backbone.Model.extend({
 
-    url: "/api/extensiones",
+    url: "/api/extension",
 
     defaults: {
         id_departamento: 0,
@@ -16,7 +16,7 @@ contacts.models.extensiones = Backbone.Model.extend({
         tipo: "",
         modelo: "",
         serial: "",
-        mac-pos: "",
+        mac_pos: "",
         grupo_captura: "",
         status: "",
         lim: "",

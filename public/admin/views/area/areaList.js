@@ -24,7 +24,7 @@ contacts.views.areaList = Backbone.View.extend({
     reloadData: function() {
         self = this
         this.collection.fetch({
-            succsess: function() {
+            success: function() {
                 self.render()
             }
         })
@@ -36,7 +36,7 @@ contacts.views.areaList = Backbone.View.extend({
         this.collection.on("change", this.render, this)
         self = this
         this.collection.fetch({
-            succsess: function() {
+            success: function() {
                 self.render()
             }
         })

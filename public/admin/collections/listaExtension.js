@@ -1,9 +1,9 @@
 var contacts = contacts || {}
 
-contacts.collections.listaExtension = Backbone.Collection.extend({
+contacts.collections.extensionList = Backbone.Collection.extend({
 
-    url: "/api/extensiones",
+    url: "/api/extension",
 
-    model: contacts.models.extensiones
+    model: contacts.models.extension
 
 })

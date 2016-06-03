@@ -1,4 +1,4 @@
-var contavts = contacts || {}
+var contacts = contacts || {}
 
 contacts.views.crudDepartamento = Backbone.View.extend({
 

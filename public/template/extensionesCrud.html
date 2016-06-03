@@ -1,14 +1,31 @@
-<div id="extensionesForm" class="row formSuperior"></div>
-<div id="extensionesList" class="row">
-    <div class="panel panel-default">
-       	<div class="panel-heading c-list">
-        	<div class="row title">
-                <div class='col-md-2'>Número asignado</div>
-                <div class='col-md-2'>Fecha ingreso</div>
-                <div class='col-md-2'>Estado</div>
-                <div class="col-md-2">Opciones</div>
-        	</div>
+<div id="formBody" class="row formSuperior"></div>
+<div id="" class="row">
+    <div class="panel panel-default panel-table">
+       	<div class="panel-heading">
+            <div class="row">
+                <div class="col col-md-6">
+                    <h3 class="panel-title">Extensiones</h3>
+                </div>
+                <div class="col col-md-6 text-right">
+                    <button type="button" data-toggle="modal" data-target="#extensionForm" class="btn btn-sm btn-success btn-crea-extension">Agregar extension</button>
+                    <!-- <button type="button" class="btn btn-sm btn-success btn-crea-extension">Agregar extension</button> -->
+                </div>
+            </div>
         </div>
-    	<ul class="list-group" id="extensionesListBody"></ul>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-list">
+                <thead>
+                    <tr>
+                        <th><em class="glyphicon glyphicon-cog"></em></th>
+                        <th class="">Numero asignado</th>
+                        <th class="">Fecha de ingreso</th>
+                        <th class="">Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="listBody">
+                </tbody>
+            </table>
+        </div>
+        <!-- <ul class="list-group" id="extensionesListBody"></ul> -->
 	</div>
 </div>
