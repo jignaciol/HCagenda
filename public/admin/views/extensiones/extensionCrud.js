@@ -2,7 +2,15 @@ var contacts = contacts || {}
 
 contacts.views.extensionesCrud = Backbone.View.extend({
 
-   template: _.template(contacts.utils.loadHtmlTemplate("extensionesCrud")),
+   template: _.template( contacts.utils.loadHtmlTemplate("extensionesCrud") ),
+
+   events: {
+        "click .btn-add": "addExtension"
+   },
+
+   addExtension: function() {
+       var formExtension = new contacts.views.extensionForm({ el: this.$("#formBody") })
+   },
 
    render: function(){
         this.$el.html(this.template())

@@ -1,50 +1,110 @@
-<div class="row">
-            <div class="row">
-                <div class="col-md-4">
-                    <select class="form-control select-extensiones">
-                        <%= lista_bl %>
-                    </select>
-                </div>
+<div class="modal modal-message modal-success fade" id="fondoForm" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="lineModalLabel">Agregar extension</h3>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <input class="form-control input-numero" type="text"></input>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control select-status">
-                        <%= lista_bl %>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-control input-csp" type="text"></input>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-control input-tipo" type="text"></input>
-                </div>
+            <div class="modal-body">
+                <!-- content goes here -->
+                <form>
+                    <div class="form-group">
+                        <label for="departamento">Departamento</label>
+                        <select id="departamento" class="form-control">
+                            <option value=0>sin departamento</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="numeroExt">Numero Asignado</label>
+                                <input type="text" class="form-control" id="numeroExt" placeholder="Ingrese numero de extension">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fechaInv">Fecha inventario</label>
+                                <input type="text" id="fechaInv" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="estadoExt">Estado</label>
+                                <div id="selectEstado">
+                                    <select id="estadoslct">
+                                        <option value=0>Oculto</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="cspExt">C.S.P</label>
+                                <input type="text" id="cspExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="tipoExt">Tipo</label>
+                                <input type="text" id="tipoExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="modeloExt">Modelo</label>
+                                <input type="text" id="modeloExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="serialExt">Serial</label>
+                                <input type="text" id="serialExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="macposExt">Mac-Pos</label>
+                                <input type="text" id="macposExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="grupoCaptura">Grupo captura</label>
+                                <input type="text" id="grupoCaptura" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="statusExt">Status</label>
+                                <input type="text" id="statusExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="limExt">L.I.M</label>
+                                <input type="text" id="limExt" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <input class="form-control input-modelo" type="text"></input>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-control input-serial" type="text"></input>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-control input-mac-pos" type="text"></input>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-control input-grupoc" type="text"></input>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <input class="form-control input-modelo" type="text"></input>
-                </div>
-                <div class="col-md-4">
-                    <input class="form-control input-serial" type="text"></input>
-                </div>
-                <div class="col-md-4">
-                    <input class="form-control input-mac-pos" type="text"></input>
+            <div class="modal-footer">
+                <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Cancel</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-add" data-dismiss="modal" role="button">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>

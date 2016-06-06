@@ -21,6 +21,15 @@ contacts.views.extensionListView = Backbone.View.extend({
         })
     },
 
+    reloadData: function() {
+        self=this
+        this.collection.fetch({
+            success: function() {
+                self.render()
+            }
+        })
+    },
+
     initialize: function(){
         self=this
         this.collection.fetch({
