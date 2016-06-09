@@ -14,10 +14,10 @@ contacts.views.areaReg = Backbone.View.extend({
     },
 
     edit: function() {
-        this.$('.edit-area').hide();
-        this.$('.delete-area').hide();
-        this.$('.update-area').show();
-        this.$('.cancel-area').show();
+        this.$('.edit-area').hide()
+        this.$('.delete-area').hide()
+        this.$('.update-area').show()
+        this.$('.cancel-area').show()
 
         var descripcion = this.$('.descripcion-area').html()
         var tipo_area = this.$(".descripcion-tipo-area").html()

@@ -60,7 +60,7 @@ contacts.views.extensionForm = Backbone.View.extend({
 
     render: function() {
         this.$el.html(this.template())
-        contacts.utils.loadSelectExtension(0, "enable", this.$("#selectDepartamento"))
+        contacts.utils.loadSelectDepartamento(0, "enable", this.$("#selectDepartamento"))
         contacts.utils.loadSelectBL(0, "enable", this.$("#selectEstado"))
         this.$("#formExtensiones").modal({backdrop: 'static'})
         return this

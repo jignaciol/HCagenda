@@ -9,20 +9,10 @@ contacts.views.extensionReg = Backbone.View.extend({
     events: {
         "click .btn-edit": "edit",
         "click .btn-delete": "delete",
-        "click .btn-update": "update",
-        "click .btn-cancel": "cancel"
     },
 
     edit: function() {
-
-    },
-
-    cancel: function() {
-        this.render()
-    },
-
-    update: function() {
-
+        contacts.app.extensionUpdate = new contacts.views.extensionUpdate({ el: $("#formBody"), model: this.model })
     },
 
     delete: function() {

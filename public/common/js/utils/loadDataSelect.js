@@ -58,7 +58,7 @@ contacts.utils.loadSelectBL = function(seleccionado, status, objetivo){
 
 }
 
-contacts.utils.loadSelectExtension = function(seleccionado, status, objetivo) {
+contacts.utils.loadSelectDepartamento = function(seleccionado, status, objetivo) {
 
     listaDepartamento = new contacts.collections.listaDepartamento()
 
