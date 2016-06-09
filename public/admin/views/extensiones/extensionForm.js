@@ -5,13 +5,28 @@ contacts.views.extensionForm = Backbone.View.extend({
     template: _.template( contacts.utils.loadHtmlTemplate("extensionesForm") ),
 
     events: {
-        "click .btn-save-extension": "addExtension"
+        "click .btn-save-extension": "addExtension",
+        "click .btn-cancel": "cancel"
+    },
+
+    dispose: function() {
+        this.undelegateEvents()
+        this.off()
+        this.$el.removeData().unbind()
+    },
+
+    cancel: function() {
+        $("#formExtensiones").modal("hide")
+        $(".modal-backdrop").remove()
+        contacts.app.formExtension = null
+
+        this.dispose()
     },
 
     addExtension: function() {
         console.log("agregando extension")
         self = this
-        /*
+
         extension = new contacts.models.extension()
         extension.set({
             id_departamento: this.$(".select-departamento").val(),
@@ -35,26 +50,12 @@ contacts.views.extensionForm = Backbone.View.extend({
             id = response["id"]
             extension.set({id: id})
             self.collection.add(extension)
-            $("#fondoForm").modal("hide")
         })
-       */
+
         $("#formExtensiones").modal("hide")
         $(".modal-backdrop").remove()
         contacts.app.formExtension = null
         this.dispose()
-    },
-
-    dispose: function() {
-        // COMPLETELY UNBIND THE VIEW
-
-        this.undelegateEvents()
-        this.off()
-        this.$el.removeData().unbind()
-
-        // Remove view from DOM
-
-        //this.remove()
-        //Backbone.View.prototype.remove.call(this)
     },
 
     render: function() {
