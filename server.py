@@ -437,7 +437,55 @@ def listar_extension_id(id):
 @bottle.route("/api/extension", method="POST")
 def agregar_extension():
     """ funcion para agregar una extension a la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    id_departamento = data["id_departamento"]
+    numero = data["numero"]
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    bl = data["bl"]
+    csp = data["csp"]
+    tipo = data["tipo"]
+    modelo = data["modelo"]
+    serial = data["serial"]
+    mac_pos = data["mac_pos"]
+    grupo_captura = data["grupo_captura"]
+    status = data["status"]
+    lim = data["lim"]
+    fecha_inventario = data["fecha_inventario"]
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda".extension', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda".extension(id, id_departamento, numero, fec_ing, bl, csp, tipo, modelo,
+                                                 serial, mac_pos, grupo_captura, status, lim, fecha_inventario)
+                                         VALUES ({0}, {1}, '{2}', '{3}', {4}, '{5}', '{6}', '{7}', '{8}',
+                                                '{9}', '{10}', '{11}', '{12}', '{13}');
+              """.format(new_id, id_departamento, numero, today, bl, csp, tipo, modelo,
+                         serial, mac_pos, grupo_captura, status, lim, fecha_inventario)
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
 @bottle.route("/api/extension", method="PUT")

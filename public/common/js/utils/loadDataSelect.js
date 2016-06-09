@@ -57,3 +57,22 @@ contacts.utils.loadSelectBL = function(seleccionado, status, objetivo){
     })
 
 }
+
+contacts.utils.loadSelectExtension = function(seleccionado, status, objetivo) {
+
+    listaDepartamento = new contacts.collections.listaDepartamento()
+
+    listaDepartamento.fetch().done(function(lista){
+        html_select = "<select class='form-control select-departamento' " + status + ">"
+        lista.forEach(function(codigo){
+            if(seleccionado == codigo["id"]){
+                html_select += "<option value=" + codigo["id"] + " selected='selected' >" + codigo["descripcion"] + "</option>"
+            } else {
+                html_select += "<option value=" + codigo["id"] + ">" + codigo["descripcion"] + "</option>"
+            }
+        })
+        html_select += "</select>"
+        $(objetivo).html(html_select)
+    })
+
+}

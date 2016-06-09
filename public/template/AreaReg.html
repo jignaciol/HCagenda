@@ -1,13 +1,7 @@
 <div class='col-md-4'><span class='descripcion-area'><%= descripcion %></span></div>
 <div class='col-md-2'><%= fec_ing %></div>
 <div class="col-md-2"><span class='descripcion-tipo-area'><%= tipo_area %></span></div>
-<div class='col-md-2 estado-area'>
-    <% if (bl == 0) {%>
-        Oculto
-    <% } else { %>
-        Visible
-    <% } %>
-</div>
+<div class='col-md-2 estado-area'><%= estado %></div>
 <div class='col-md-2'>
     <button class="btn btn-warning edit-area">
         <span class='glyphicon glyphicon-edit' aria-hidden='true'></span>
