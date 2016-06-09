@@ -3,7 +3,7 @@ var contacts = contacts || {}
 
 contacts.models.extension = Backbone.Model.extend({
 
-    url: "/api/extension",
+     urlRoot: "/api/extension",
 
     defaults: {
         id_departamento: 0,

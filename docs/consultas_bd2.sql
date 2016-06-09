@@ -265,3 +265,25 @@ LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = e.bl
 ORDER BY e.id;
 
 UPDATE "Agenda".extension SET 
+
+
+
+
+/* sql para trabajar con extension */
+SELECT id, id_departamento, numero, fec_ing, bl, csp, tipo, modelo, 
+       serial, mac_pos, grupo_captura, status, lim, fecha_inventario
+  FROM "Agenda".extension;
+
+delete from "Agenda".extension where id >= 286;
+
+SELECT id, id_departamento, numero, fec_ing, bl, csp, tipo, modelo, 
+       serial, mac_pos, grupo_captura, status, lim, fecha_inventario
+FROM "Agenda".extension
+WHERE numero = '41375';
+
+
+select * from "Agenda".departamento where id = 23;
+
+select * from "Agenda".empleado where id = 729 ;
+
+select * from "Agenda"."empleadoExtension" where id_extension = 93;

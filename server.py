@@ -488,10 +488,63 @@ def agregar_extension():
     return response
 
 
-@bottle.route("/api/extension", method="PUT")
+@bottle.route("/api/extension/:id", method="PUT")
 def actualizar_extension(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    id_departamento = data["id_departamento"]
+    numero = data["numero"]
+    fec_ing = data["fec_ing"]
+    bl = data["bl"]
+    csp = data["csp"]
+    tipo = data["tipo"]
+    modelo = data["modelo"]
+    serial = data["serial"]
+    mac_pos = data["mac_pos"]
+    grupo_captura = data["grupo_captura"]
+    status = data["status"]
+    lim = data["lim"]
+    fecha_inventario = data["fecha_inventario"]
+    print data
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda".extension
+                  SET id_departamento={0},
+                      numero='{1}',
+                      fec_ing='{2}',
+                      bl={3},
+                      csp='{4}',
+                      tipo='{5}',
+                      modelo='{6}',
+                      serial='{7}',
+                      mac_pos='{8}',
+                      grupo_captura='{9}',
+                      status='{10}',
+                      lim='{11}',
+                      fecha_inventario='{12}'
+                  WHERE id = {13};
+               """.format(id_departamento, numero, fec_ing, bl, csp, tipo, modelo, serial, mac_pos, grupo_captura, status, lim, fecha_inventario, id)
+        print sql
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
 @bottle.route("/api/extension", method="DELETE")

@@ -8,18 +8,24 @@ contacts.views.extensionUpdate = Backbone.View.extend({
     },
 
     update: function() {
-        console.log("actualizando")
         self = this
         this.model.set({
-            id_departamento: this.$(".select-departamento").val()
-
+            id_departamento: this.$(".select-departamento").val(),
+            numero: this.$("#numeroExt").val(),
+            bl: this.$(".select-bl").val(),
+            csp: this.$("#cspExt").val(),
+            tipo: this.$("#tipoExt").val(),
+            modelo: this.$("#modeloExt").val(),
+            serial: this.$("#serialExt").val(),
+            mac_pos: this.$("#macposExt").val(),
+            grupo_captura: this.$("#grupoCaptura").val(),
+            status: this.$("#statusExt").val(),
+            lim: this.$("#limExt").val(),
+            fecha_inventario: this.$("#fechaInv").val()
         })
-        this.model.save({
-            success: function() {
-                self.cancel()
-            }
+        this.model.save().done(function(){
+            self.cancel()
         })
-
     },
 
     cancel: function() {
