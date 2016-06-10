@@ -445,18 +445,18 @@ def agregar_extension():
         print "error capturando json"
 
     id_departamento = data["id_departamento"]
-    numero = data["numero"]
+    numero = data["numero"].encode("utf-8")
     today = datetime.datetime.today().strftime('%Y-%m-%d')
     bl = data["bl"]
-    csp = data["csp"]
-    tipo = data["tipo"]
-    modelo = data["modelo"]
-    serial = data["serial"]
-    mac_pos = data["mac_pos"]
-    grupo_captura = data["grupo_captura"]
-    status = data["status"]
-    lim = data["lim"]
-    fecha_inventario = data["fecha_inventario"]
+    csp = data["csp"].encode("utf-8")
+    tipo = data["tipo"].encode("utf-8")
+    modelo = data["modelo"].encode("utf-8")
+    serial = data["serial"].encode("utf-8")
+    mac_pos = data["mac_pos"].encode("utf-8")
+    grupo_captura = data["grupo_captura"].encode("utf-8")
+    status = data["status"].encode("utf-8")
+    lim = data["lim"].encode("utf-8")
+    fecha_inventario = data["fecha_inventario"].encode("utf-8")
 
     try:
         conn = psycopg2.connect(DSN)
@@ -499,18 +499,19 @@ def actualizar_extension(id=0):
         print "error capturando json"
 
     id_departamento = data["id_departamento"]
-    numero = data["numero"]
-    fec_ing = data["fec_ing"]
+    numero = data["numero"].encode("utf-8")
+    fec_ing = data["fec_ing"].encode("utf-8")
     bl = data["bl"]
-    csp = data["csp"]
-    tipo = data["tipo"]
-    modelo = data["modelo"]
-    serial = data["serial"]
-    mac_pos = data["mac_pos"]
-    grupo_captura = data["grupo_captura"]
-    status = data["status"]
-    lim = data["lim"]
-    fecha_inventario = data["fecha_inventario"]
+    csp = data["csp"].encode("utf-8")
+    tipo = data["tipo"].encode("utf-8")
+    modelo = data["modelo"].encode("utf-8")
+    serial = data["serial"].encode("utf-8")
+    mac_pos = data["mac_pos"].encode("utf-8")
+    grupo_captura = data["grupo_captura"].encode("utf-8")
+    status = data["status"].encode("utf-8")
+    lim = data["lim"].encode("utf-8")
+    fecha_inventario = data["fecha_inventario"].encode("utf-8")
+
     print data
     try:
         conn = psycopg2.connect(DSN)
@@ -547,10 +548,31 @@ def actualizar_extension(id=0):
     return response
 
 
-@bottle.route("/api/extension", method="DELETE")
+@bottle.route("/api/extension/:id", method="DELETE")
 def borrar_extension(id=0):
     """ funcion para borrar una extension en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda".extension WHERE id={0};""".format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = "error al intentar borrar el registro en la base de datos"
+        print "ERROR: no se pudo borrar el registo ", error
+
+    return response
+
 
 # CODIGO PARA MODELO DATOS DE CONTACTO #
 
