@@ -22,11 +22,7 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
         var descripcion = this.$('.descripcion-tipoArea').html();
 
         this.$('.descripcion-tipoArea').html('<input name="descripcion" type="text" class="form-control descripcion-update" value="' + descripcion + '">');
-        if (this.model.get('bl') == 0) {
-            this.$('.estado-tipoArea').html('<select name="bl" class="form-control data-estado"> <option value="0" selected="selected">Oculto</option> <option value="1">Visible</option> </select>');
-        } else {
-            this.$('.estado-tipoArea').html('<select name="bl" class="form-control data-estado"> <option value="0">Oculto</option> <option value="1" selected="selected">Visible</option> </select>');
-        }
+        contacts.utils.loadSelectBL( this.model.get("bl"), "enable", this.$(".estado-tipoArea"))
     },
 
     cancel: function() {
@@ -36,8 +32,9 @@ contacts.views.TipoAreaReg = Backbone.View.extend({
     update: function() {
         var self = this;
         this.model.set({
-            'descripcion': this.$('.descripcion-update').val(),
-            'bl': this.$('.data-estado').val()
+            descripcion: this.$('.descripcion-update').val(),
+            bl: this.$(".select-bl").val(),
+            estado: this.$(".select-bl option:selected").html()
         })
         this.model.save({}, {
             success: function(){

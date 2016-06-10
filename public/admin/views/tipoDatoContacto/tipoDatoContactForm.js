@@ -9,13 +9,17 @@ contacts.views.tipoDatoContactoForm = Backbone.View.extend({
     addTipoDatoContacto: function() {
         self=this
         var descripcion = this.$(".input-desc-tipoDatoC").val()
-        var bl = this.$(".select-tipoDatoC-bl").val()
+        var bl = this.$(".select-bl").val()
+        var estado = this.$(".select-bl option:selected").html()
         var fec_ing = new Date().toJSON().slice(0, 10)
 
         tipoDatoContacto = new contacts.models.tipoDatoContacto()
-        tipoDatoContacto.set({'descripcion': descripcion})
-        tipoDatoContacto.set({'fec_ing': fec_ing})
-        tipoDatoContacto.set({'bl': bl})
+        tipoDatoContacto.set({
+            descripcion: descripcion,
+            fec_ing: fec_ing,
+            bl: bl,
+            estado: estado
+        })
 
         tipoDatoContacto.save().done(function(response){
             id = response['id']
@@ -28,6 +32,7 @@ contacts.views.tipoDatoContactoForm = Backbone.View.extend({
 
     render: function() {
         this.$el.html( this.template() )
+        contacts.utils.loadSelectBL(0, "enable", this.$(".select-tipoDC-bl"))
        return this
     },
 

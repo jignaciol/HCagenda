@@ -7,7 +7,8 @@ contacts.models.tipoDatoContacto = Backbone.Model.extend({
     defaults: {
         descripcion: "",
         fec_ing: "",
-        bl: 1
+        bl: 1,
+        estado: ""
     }
 
 })

@@ -219,10 +219,13 @@ def listar_areas():
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl, a.id_tipo_area,
+        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                  bl.id as bl, bl.descripcion as estado,
+                  a.id_tipo_area,
                   ta.descripcion as tipo_area
                   FROM "Agenda"."Area" a
                   LEFT JOIN "Agenda".tipoarea ta ON ta.id = a.id_tipo_area
+                  LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = a.bl
                   ORDER BY a.id ASC; """
         cur.execute(sql)
         records = cur.fetchall()
@@ -244,11 +247,16 @@ def listar_area_id(id):
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing, a.bl, a.id_tipo_area,
+        sql = """
+                SELECT a.id, a.descripcion, to_char(a.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                  bl.id as bl, bl.descripcion as estado,
+                  a.id_tipo_area,
                   ta.descripcion as tipo_area
                   FROM "Agenda"."Area" a
                   LEFT JOIN "Agenda".tipoarea ta ON ta.id = a.id_tipo_area
-                  ORDER BY a.id ASC; """
+                  LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = a.bl
+                  ORDER BY a.id ASC;
+              """
 
         cur.execute(sql)
         records = cur.fetchall()
@@ -894,7 +902,13 @@ def listar_tipoarea():
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl FROM "Agenda".tipoarea ORDER BY id ASC; """
+        sql = """
+                SELECT ta.id, ta.descripcion, to_char(ta.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                bl.id as bl, bl.descripcion as estado
+                FROM "Agenda".tipoarea ta
+                LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = ta.bl
+                ORDER BY ta.id ASC;
+              """
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -915,10 +929,14 @@ def listar_tipoarea_id(id):
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl
-                  FROM "Agenda".tipoarea
-                  WHERE id = {0}
-                  ORDER BY id; """.format(id)
+        sql = """
+                   SELECT ta.id, ta.descripcion, to_char(ta.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                   bl.id as bl, bl.descripcion as estado
+                   FROM "Agenda".tipoarea ta
+                   LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = ta.bl
+                   WHERE id = {0}
+                   ORDER BY ta.id;
+              """.format(id)
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -973,8 +991,8 @@ def agregar_tipoarea():
     return response
 
 
-@bottle.route("/api/tipo_area", method="PUT")
-def actualizar_tipoarea():
+@bottle.route("/api/tipo_area/:id", method="PUT")
+def actualizar_tipoarea(id=0):
     """ actualizar: tipoarea """
     corkServer.require(fail_redirect="/")
     response = {"OK": False, "msg": ""}
@@ -985,7 +1003,6 @@ def actualizar_tipoarea():
 
     descripcion = data["descripcion"]
     bl = data["bl"]
-    id = data["id"]
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
@@ -1044,7 +1061,13 @@ def listar_tipodatocontacto():
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl FROM "Agenda"."tipoDatoContacto" ORDER BY id ASC; """
+        sql = """
+                SELECT tc.id, tc.descripcion, to_char(tc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                       bl.id as bl, bl.descripcion as estado
+                FROM "Agenda"."tipoDatoContacto" tc
+                LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = tc.bl
+                ORDER BY tc.id ASC;
+              """
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -1065,10 +1088,14 @@ def listar_tipodatocontacto_id(id):
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
-        sql = """ SELECT id, descripcion, to_char(fec_ing, 'DD-MM-YYYY') as fec_ing, bl
-                  FROM "Agenda"."tipoDatoContacto"
-                  WHERE id = {0}
-                  ORDER BY id; """.format(id)
+        sql = """
+                 SELECT tc.id, tc.descripcion, to_char(tc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                        bl.id as bl, bl.descripcion as estado
+                 FROM "Agenda"."tipoDatoContacto" tc
+                 LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = tc.bl
+                 WHERE tc.id={0}
+                 ORDER BY tc.id ASC;
+              """.format(id)
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()

@@ -10,8 +10,13 @@ contacts.views.TipoAreaList = Backbone.View.extend({
     },
 
     render: function(){
-        this.$el.html('')
-        self = this;
+        this.$el.html("")
+        this.collection.on('add', this.render, this)
+        this.collection.on('remove', this.render, this)
+        this.collection.on('change', this.render, this)
+
+        self = this
+        console.log(this.collection)
         this.collection.forEach(function(tipo_area){
             self.render_tipo_area(tipo_area)
         })
@@ -22,7 +27,7 @@ contacts.views.TipoAreaList = Backbone.View.extend({
     },
 
     reloadData: function() {
-         self = this;
+        self = this;
         this.collection.fetch({
             success: function() {
                 self.render();
@@ -31,9 +36,6 @@ contacts.views.TipoAreaList = Backbone.View.extend({
     },
 
     initialize: function() {
-        this.collection.on('add', this.render, this)
-        this.collection.on('remove', this.render, this)
-        this.collection.on('change', this.render, this)
         self = this;
         this.collection.fetch({
             success: function() {

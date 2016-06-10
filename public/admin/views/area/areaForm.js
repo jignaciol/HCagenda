@@ -14,7 +14,8 @@ contacts.views.areaForm = Backbone.View.extend({
             id_tipo_area: this.$(".select-tipoArea").val(),
             tipo_area: this.$(".select-tipoArea option:selected").html(),
             fec_ing: new Date().toJSON().slice(0, 10),
-            bl: this.$(".select-area-bl").val()
+            bl: this.$(".select-bl").val(),
+            estado: this.$(".select-bl option:selected").html()
         })
 
         area.save().done(function(response){
@@ -37,6 +38,7 @@ contacts.views.areaForm = Backbone.View.extend({
         status = "enable"
         seleccionado = 0
         contacts.utils.loadSelectTipoArea(seleccionado, status, objetivo)
+        contacts.utils.loadSelectBL(0, "enable", this.$(".select-areaBl"))
     },
 
     initialize: function() {
