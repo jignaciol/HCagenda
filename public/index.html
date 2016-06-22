@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="public/common/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="public/common/lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="public/common/css/main.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="wrapperBody">
@@ -60,6 +61,7 @@
     <script src="public/common/lib/underscore/underscore.js" type="text/javascript"></script>
     <script src="public/common/lib/jquery/dist/jquery.js" type="text/javascript"></script>
     <script src="public/common/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js" type="text/javascript"></script>
     <script src="public/common/lib/backbone/backbone.js" type="text/javascript"></script>
     <!-- <script src="public/common/lib/backbone-relational/backbone-relational.js" type="text/javascript"></script> -->
 
@@ -81,6 +83,9 @@
     <script src="public/admin/models/tipoDatoContacto.js" type="text/javascript"></script>
     <script src="public/common/js/models/borradologico.js" type="text/javascript"></script>
     <script src="public/admin/models/extension.js" type="text/javascript"></script>
+    <script src="public/admin/models/empleadoextension.js" type="text/javascript"></script>
+    <script src="public/admin/models/empleado.js" type="text/javascript"></script>
+    <script src="public/admin/models/datoContacto.js" type="text/javascript"></script>
 
     <!-- colecciones del sistema -->
     <script src="public/contacts/collections/lista_empleados.js" type="text/javascript"></script>
@@ -91,6 +96,9 @@
     <script src="public/admin/collections/lista_departamento.js" type="text/javascript"></script>
     <script src="public/common/js/collections/listaBorradoLogico.js" type="text/javascript"></script>
     <script src="public/admin/collections/listaExtension.js" type="text/javascript"></script>
+    <script src="public/admin/collections/listaExtensionesAsignadas.js" type="text/javascript"></script>
+    <script src="public/admin/collections/listaEmpleados.js" type="text/javascript"></script>
+    <script src="public/admin/collections/listaDatoContacto.js" type="text/javascript"></script>
 
     <!-- vistas de la app -->
         <!-- Pagina de error -->
@@ -144,6 +152,17 @@
     <script src="public/admin/views/extensiones/extensionForm.js" type="text/javascript"></script>
     <script src="public/admin/views/extensiones/extensionUpdate.js" type="text/javascript"></script>
 
+        <!-- empleado extension -->
+    <script src="public/admin/views/empleadoExtension/empleadoExtensionCrud.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleadoExtension/empleadoExtensionForm.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleadoExtension/empleadoExtensionList.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleadoExtension/empleadoExtensionReg.js" type="text/javascript"></script>
+
+        <!-- empleado -->
+    <script src="public/admin/views/empleado/empleadoCrud.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleado/empleadoList.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleado/empleadoReg.js" type="text/javascript"></script>
+    <script src="public/admin/views/empleado/empleadoForm.js" type="text/javascript"></script>
 
     <!-- router de la app -->
     <script src="public/contacts/routers/router.js" type="text/javascript"></script>

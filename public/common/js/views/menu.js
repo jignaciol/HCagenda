@@ -48,11 +48,18 @@ contacts.views.menuView = Backbone.View.extend({
     },
 
     empleados: function() {
-        console.log("boton empleados presionado")
+        $("#btnTabsContacts").html("")
+        $("#adminContainer").html("")
+        listaEmpleado = new contacts.collections.listaEmpleados()
+        contacts.app.empleados = new contacts.views.empleadoCrud({ el: $("#adminContainer"), collection: listaEmpleado })
     },
 
     asignarExtension: function() {
+        $("#btnTabsContacts").html("")
+        $("#adminContainer").html("")
+
         console.log("boton asignar extension presionado")
+        contacts.app.empleadoExtension = new contacts.views.empleadoExtensionCrud({ el: $("#adminContainer") })
     },
 
     extensiones: function() {

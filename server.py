@@ -121,14 +121,15 @@ def listar_empleados():
 
         sql = """
                 SELECT e.ficha, e.cedula, e.nombre, e.apellido,
-                       epx.id_extension, epx.mostrar,
+                       epx.id_extension, bl.id as bl, bl.descripcion as estado,
                        ext.numero as telefono, ext.serial,
-                       d.descripcion as departamento,
+                       d.id as id_departamento, d.descripcion as departamento,
                        dcc.descripcion as correo,
                        dcm.descripcion as celular,
                        dct.descripcion as habitacion
                 FROM "Agenda".empleado e
                 LEFT JOIN "Agenda"."empleadoExtension" epx ON epx.id_empleado = e.id
+                LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = epx.bl
                 LEFT JOIN "Agenda"."extension" ext ON ext.id = epx.id_extension
                 LEFT JOIN "Agenda"."departamento" d ON d.id = e.id_departamento
                 LEFT JOIN "Agenda"."datosContacto" dcc ON dcc.id_empleado = e.id and dcc.id_tipo_contacto = 2
@@ -152,29 +153,60 @@ def listar_empleados():
 
 # funciones API RESTFULL #
 
-@bottle.route("api/empleado/:id", method="GET")
-def listar_empleado_id(id=0):
-    """ funcion que lista un empleados dentro de la base de datos de contactos segun el id indicado """
-
+@bottle.route("/api/empleado", method="GET")
+def lista_empleados():
+    """ Funcion que lista todos los empleados """
+    corkServer.require(fail_redirect="/")
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
         sql = """
-                SELECT e.ficha, e.cedula, e.nombre, e.apellido,
-                       epx.id_extension, epx.mostrar,
-                       ext.numero as telefono, ext.serial,
-                       d.descripcion as departamento,
-                       dcc.descripcion as correo,
-                       dcm.descripcion as celular,
-                       dct.descripcion as habitacion
+                SELECT  e.id,
+                        e.ficha,
+                        e.voe,
+                        e.cedula,
+                        e.nombre,
+                        e.apellido,
+                        e.indicador,
+                        to_char(e.fecha_nac, 'DD-MM-YYYY') as fecha_nac,
+                        to_char(e.fecha_ing, 'DD-MM-YYYY') as fecha_ing,
+                        e.id_departamento
                 FROM "Agenda".empleado e
-                LEFT JOIN "Agenda"."empleadoExtension" epx ON epx.id_empleado = e.id
-                LEFT JOIN "Agenda"."Extension" ext ON ext.id = epx.id_extension
-                LEFT JOIN "Agenda"."departamento" d ON d.id = e.id_departamento
-                LEFT JOIN "Agenda"."datosContacto" dcc ON dcc.id_empleado = e.id and dcc.id_tipo_contacto = 2
-                LEFT JOIN "Agenda"."datosContacto" dcm ON dcm.id_empleado = e.id and dcm.id_tipo_contacto = 3
-                LEFT JOIN "Agenda"."datosContacto" dct ON dct.id_empleado = e.id and dct.id_tipo_contacto = 4
+                ORDER BY e.nombre;
+              """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("/api/empleado/:id", method="GET")
+def listar_empleado_id(id=0):
+    """ funcion que lista un empleados dentro de la base de datos de contactos segun el id indicado """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT  e.id,
+                        e.ficha,
+                        e.voe,
+                        e.cedula,
+                        e.nombre,
+                        e.apellido,
+                        e.indicador,
+                        to_char(e.fecha_nac, 'DD-MM-YYYY') as fecha_nac,
+                        to_char(e.fecha_ing, 'DD-MM-YYYY') as fecha_ing,
+                        e.id_departamento
+                FROM "Agenda".empleado e
                 WHERE e.id = {0}
                 ORDER BY e.nombre;
               """.format(id)
@@ -191,22 +223,133 @@ def listar_empleado_id(id=0):
     return json_result
 
 
-@bottle.route("api/empleado/", method="POST")
+@bottle.route("/api/empleado", method="POST")
 def agregar_empleado():
     """ funcion para agregar un empleado a la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    ficha = data["ficha"]
+    voe = data["voe"]
+    cedula = data["cedula"]
+    nombre = data["nombre"]
+    apellido = data["apellido"]
+    indicador = data["indicador"]
+    fecha_nac = data["fecha_nac"]
+    id_departamento = data["id_departamento"]
+    bl = data["bl"]
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda".empleado', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda".empleado(id, ficha, voe, cedula, nombre, apellido, indicador, fecha_nac, fecha_ing, id_departamento, bl)
+                     VALUES ( {0}, '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, {10} );
+              """.format(new_id, ficha, voe, cedula, nombre, apellido, indicador, fecha_nac, today, id_departamento, bl)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/empleado/:id", method="PUT")
+@bottle.route("/api/empleado/:id", method="PUT")
 def actualizar_empleado(id=0):
     """ funcion para actualizar los datos de un empleado en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    ficha = data["data"]
+    voe = data["voe"]
+    cedula = data["cedula"]
+    nombre = data["nombre"]
+    apellido = data["apellido"]
+    indicador = data["indicador"]
+    fecha_nac = data["fecha_nac"]
+    id_departamento = data["id_departamento"]
+    bl = data["bl"]
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda".empleado
+                  SET ficha={0},
+                      voe={1},
+                      cedula={2},
+                      nombre={3},
+                      apellido={4},
+                      indicador={5},
+                      fecha_nac={6},
+                      id_departamento={7},
+                      bl={8}
+                  WHERE id = {9};""".format(ficha, voe, cedula, nombre, apellido, indicador, fecha_nac, id_departamento, bl)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/empleado/:id", method="DELETE")
+@bottle.route("/api/empleado/:id", method="DELETE")
 def borrar_empleado(id=0):
     """ funcion para borrar un empleado en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda"."datosContacto" WHERE id_empleado = {0} """.format(id)
+        cur.execute(sql)
+        conn.commit()
+
+        sql = """ DELETE FROM "Agenda".empleado WHERE id = {0};""".format(id)
+        cur.execute(sql)
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = "error al intentar borrar el registro en la base de datos"
+        print "ERROR: no se pudo borrar el registo -->", error
+
+    return response
 
 # CODIGO PARA MODELO AREA #
 
@@ -585,34 +728,173 @@ def borrar_extension(id=0):
 # CODIGO PARA MODELO DATOS DE CONTACTO #
 
 
-@bottle.route("/api/datoscontacto", method="GET")
+@bottle.route("/api/datocontacto", method="GET")
 def listar_datosContacto():
     """ funcion para listar todas los registros de los datos de contacto """
-    pass
+    # corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                  SELECT dc.id,
+                         dc.descripcion,
+                         to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                         dc.id_empleado,
+                         dc.id_tipo_contacto
+                  FROM "Agenda"."datosContacto" dc;
+              """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("/api/datoscontacto", method="GET")
-def listar_datoscontacto_id(id):
+@bottle.route("/api/datocontacto/:id", method="GET")
+def listar_datoscontacto_id(id=0):
     """ funcion para listar datoscontacto segun el id enviado """
-    pass
+    # corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                   SELECT dc.id,
+                          dc.descripcion,
+                          to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                          dc.id_empleado,
+                          dc.id_tipo_contacto
+                   FROM "Agenda"."datosContacto" dc
+                   WHERE dc.id={0}
+                   ORDER BY dc.id asc;
+              """.format(id)
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/extension/", method="POST")
+@bottle.route("/api/datoscontacto/", method="POST")
 def agregar_datoscontacto():
     """ funcion para agregar una extension a la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"]
+    id_empleado = data["id_empleado"]
+    id_tipo_contacto = data["id_tipo_contacto"]
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda"."datosContacto"', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda"."datosContacto"(id, descripcion, fec_ing, id_empleado, id_tipo_contacto)
+                     VALUES ({0}, '{1}', '{2}', {3}, {4});
+              """.format(new_id, descripcion, today, id_empleado, id_tipo_contacto)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/extension/:id", method="PUT")
+@bottle.route("/api/datoscontacto/:id", method="PUT")
 def actualizar_datoscontacto(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"].encode('utf-8')
+    bl = data["bl"]
+    id_ubicacion = data["id_ubicacion"]
+    id_piso = data["id_piso"]
+    alias = data["alias"]
+    # id = data["id"]
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                  UPDATE "Agenda"."datosContacto" dc
+                  SET descripcion={0},
+                       fec_ing={1},
+                       id_empleado={2},
+                       id_tipo_contacto={3}
+                  WHERE dc.id={4};
+               """.format(descripcion, bl, id_ubicacion, id_piso, alias, id)
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/extension/:id", method="DELETE")
+@bottle.route("/api/datoscontacto/:id", method="DELETE")
 def borrar_datoscontacto(id=0):
     """ funcion para borrar una extension en la base de datos """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda"."datosContacto" dc WHERE dc.id={0}; """.format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = 'error al intentar borrar el registro en la base de datos'
+        print 'ERROR: no se pudo borrar el registo ', error
+
+    return response
+
 
 # motodos REST para modelo borrado_logico #
 
@@ -862,34 +1144,175 @@ def borrar_departamento(id=0):
 # MODELO: empleadoextension #
 
 
-@bottle.route("api/empleadoextension/", method="GET")
+@bottle.route("/api/empleadoextension", method="GET")
 def listar_empleadoextension():
     """ listar todos: empleadoextension """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT 	ee.id,
+                    e.id as id_empleado, TRIM(e.nombre) || ' ' || TRIM(e.apellido) as empleado,
+                    ext.id as id_extension, ext.numero,
+                    to_char(ee.fec_asignacion, 'DD-MM-YYYY') as fec_asignacion,
+                    bl.id as bl, bl.descripcion as estado
+                FROM "Agenda"."empleadoExtension" ee
+                LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id=ee.bl
+                LEFT JOIN "Agenda".empleado e ON e.id=ee.id_empleado
+                LEFT JOIN "Agenda".extension ext ON ext.id = ee.id_extension
+            """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/empleadoextension/:id", method="GET")
-def listar_empleadoextension_id(id):
+@bottle.route("/api/empleadoextension/:id", method="GET")
+def listar_empleadoextension_id(id=0):
     """ listar id:  empleadoextension """
-    pass
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT 	ee.id,
+                    e.id as id_empleado, TRIM(e.nombre) || ' ' || TRIM(e.apellido) as empleado,
+                    ext.id as id_extension, ext.numero,
+                    to_char(ee.fec_asignacion, 'DD-MM-YYYY') as fec_asignacion,
+                    bl.id as bl, bl.descripcion as estado
+                FROM "Agenda"."empleadoExtension" ee
+                LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id=ee.bl
+                LEFT JOIN "Agenda".empleado e ON e.id=ee.id_empleado
+                LEFT JOIN "Agenda".extension ext ON ext.id = ee.id_extension
+                WHERE ee.id={0};
+            """.format(id)
+
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
 
 
-@bottle.route("api/empleadoextension/", method="POST")
+@bottle.route("/api/empleadoextension", method="POST")
 def agregar_empleadoextension():
     """ agregar: empleadoextension """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    id_extension = data["id_extension"]
+    id_empleado = data["id_empleado"]
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    bl = data["bl"]
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda"."empleadoExtension"', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """
+                  INSERT INTO "Agenda"."empleadoExtension"(id, id_empleado, id_extension, fec_asignacion, bl)
+                  VALUES ({0}, {1}, {2}, '{3}', {4});
+              """.format(new_id, id_empleado, id_extension, today, bl)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
 
 
-@bottle.route("api/empleandoextension/:id", method="PUT")
+@bottle.route("/api/empleadoextension/:id", method="PUT")
 def actualizar_empleadoextension(id=0):
     """ actualizar: empleadoextension """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    id_empleado = data["id_empleado"]
+    id_extension = data["id_extension"]
+    bl = data["bl"]
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda"."empleadoExtension"
+                  SET id_empleado={0},
+                      id_extension={1},
+                      bl={2}
+                  WHERE id={3};
+               """.format(id_empleado, id_extension, bl, id)
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
 
 
-@bottle.route("api/empleadoextension/:id", method="DELETE")
+@bottle.route("/api/empleadoextension/:id", method="DELETE")
 def borrar_empleadoextension(id=0):
     """ borrar: empleadoextension """
-    pass
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda"."empleadoExtension" WHERE id={0};""".format(id)
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = 'error al intentar borrar el registro en la base de datos'
+        print 'ERROR: no se pudo borrar el registo ', error
+
+    return response
+
 
 # MODELO: tipoarea #
 

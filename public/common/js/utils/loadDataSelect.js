@@ -76,3 +76,42 @@ contacts.utils.loadSelectDepartamento = function(seleccionado, status, objetivo)
     })
 
 }
+
+
+contacts.utils.loadSelectExtensiones = function(seleccionado, status, objetivo) {
+
+    listaExtensiones = new contacts.collections.extensionList()
+
+    listaExtensiones.fetch().done(function(lista){
+        html_select = "<select class='form-control select-extension' " + status + ">"
+        lista.forEach(function(codigo){
+            if(seleccionado == codigo["id"]){
+                html_select += "<option value=" + codigo["id"] + " selected='selected' >" + codigo["numero"] + "</option>"
+            } else {
+                html_select += "<option value=" + codigo["id"] + ">" + codigo["numero"] + "</option>"
+            }
+        })
+        html_select += "</select>"
+        $(objetivo).html(html_select)
+    })
+}
+
+
+contacts.utils.loadSelectEmpleado = function(seleccionado, status, objetivo) {
+
+    listaEmpleados = new contacts.collections.listaEmpleados()
+
+    listaEmpleados.fetch().done(function(lista){
+        html_select = "<select class='form-control select-empleado' " + status + ">"
+        lista.forEach(function(empleado){
+            if(seleccionado == empleado["id"]){
+                html_select += "<option value=" + empleado["id"] + " selected='selected' >" + empleado["nombre"] + " " + empleado["apellido"] + "</option>"
+            } else {
+                html_select += "<option value=" + empleado["id"] + ">" + empleado["nombre"] + " " + empleado["apellido"] + "</option>"
+            }
+        })
+        html_select += "</select>"
+        $(objetivo).html(html_select)
+    })
+
+}

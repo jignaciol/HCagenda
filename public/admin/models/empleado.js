@@ -2,7 +2,7 @@ var contacts = contacts || {}
 
 contacts.models.empleado = Backbone.Model.extend({
 
-    url: "/api/empleado",
+    urlRoot: "/api/empleado",
 
     defaults: {
         ficha: "",
@@ -13,8 +13,7 @@ contacts.models.empleado = Backbone.Model.extend({
         indicador: "",
         fecha_nac: "",
         fecha_ing: "",
-        id_departamento: 0,
-        departamento: ""
+        id_departamento: 0
     }
 
-});
+})

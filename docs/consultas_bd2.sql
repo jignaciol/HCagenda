@@ -287,3 +287,48 @@ select * from "Agenda".departamento where id = 23;
 select * from "Agenda".empleado where id = 729 ;
 
 select * from "Agenda"."empleadoExtension" where id_extension = 93;
+
+
+
+
+SELECT ta.id, ta.descripcion, to_char(ta.fec_ing, 'DD-MM-YYYY') as fec_ing,
+bl.id as id, bl.descripcion as estado
+  FROM "Agenda".tipoarea ta
+ LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = ta.bl
+  ORDER BY ta.id ASC;
+
+ 
+
+SELECT tc.id, tc.descripcion, to_char(tc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+	bl.id as bl, bl.descripcion as estado
+FROM "Agenda"."tipoDatoContacto" tc
+LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id = tc.bl            
+ORDER BY tc.id ASC;
+
+
+
+/* */
+SELECT 	ee.id,
+	e.id as id_empleado, TRIM(e.nombre) || ' ' || TRIM(e.apellido) as empleado,
+	ext.id as id_extension, ext.numero, 
+	ee.fec_asignacion,
+	bl.id as bl, bl.descripcion as estado
+FROM "Agenda"."empleadoExtension" ee
+LEFT JOIN "Agenda"."borradoLogico" bl ON bl.id=ee.bl
+LEFT JOIN "Agenda".empleado e ON e.id=ee.id_empleado
+LEFT JOIN "Agenda".extension ext ON ext.id = ee.id_extension
+WHERE ee.id = 5;
+
+
+INSERT INTO "Agenda"."empleadoExtension"(
+            id, id_empleado, id_extension, fec_asignacion, bl)
+    VALUES ({0}, {1}, {2}, {3});
+
+
+
+UPDATE "Agenda"."empleadoExtension"
+   SET id_empleado={0},
+       id_extension={1},
+       fec_asignacion={2},
+       bl={3}
+ WHERE id={4};
