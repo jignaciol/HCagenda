@@ -236,9 +236,9 @@ def agregar_empleado():
     ficha = data["ficha"]
     voe = data["voe"]
     cedula = data["cedula"]
-    nombre = data["nombre"]
-    apellido = data["apellido"]
-    indicador = data["indicador"]
+    nombre = data["nombre"].encode("utf-8")
+    apellido = data["apellido"].encode("utf-8")
+    indicador = data["indicador"].encode("utf-8")
     fecha_nac = data["fecha_nac"]
     id_departamento = data["id_departamento"]
     bl = data["bl"]
@@ -258,7 +258,7 @@ def agregar_empleado():
               """.format(new_id, ficha, voe, cedula, nombre, apellido, indicador, fecha_nac, today, id_departamento, bl)
 
         cur.execute(sql)
-        conn.commit()
+        # conn.commit()
         cur.close()
         conn.close()
 

@@ -15,81 +15,61 @@
 				                    <input type="text" class="form-control" id="ficha" placeholder="Ej. 11458">
 				                </div>
                         	</div>
-                        </div>
-                        
-                        <div class="row">
                             <div class="col-sm-3">
                             	<div class="form-group">
-                            		<input checked data-toggle="toggle" data-size="mini" type="checkbox">
-                            		<!--
                             		<label for="nacionalidad" class="small">Nacionalidad</label>
 		                            <select id="nacionalidad" class="form-control">
-		                            	<option value="">Venezolano</option>
-		                            	<option value="">Extranjero</option>
+		                            	<option value="V">Venezolano</option>
+		                            	<option value="E">Extranjero</option>
 		                            </select>
-		                            -->
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
+                            	<div class="form-group">
+                            		<label for="cedula" class="small">Cedula</label>
+                                    <input id="cedula" type="text" placeholder="Ej. 14632123" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="nombre" class="small">Nombre</label>
                                     <input type="text" id="nombre" class="form-control" placeholder="Ej. Alfonso José">
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="apellido" class="small">Apellido</label>
                                     <input type="text" id="apellido" class="form-control" placeholder="Ej. Castillo Plaza">
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="row">
-                            
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="tipoExt" class="small">Indicador</label>
-                                    <input type="text" id="tipoExt" class="form-control" placeholder="">
+                                    <label for="indicador" class="small">Indicador</label>
+                                    <input type="text" id="indicador" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="fecha_nac" class="small">Nacimiento</label>
+                                    <input type="text" id="fecha_nac" class="form-control" placeholder="">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="modeloExt" class="small">Fecha de nacimiento</label>
-                                    <input type="text" id="modeloExt" class="form-control" placeholder="">
+                                    <label for="estado" class="small">Departamento</label>
+                                    <div id="estado" class="departamento"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="serialExt" class="small">Serial</label>
-                                    <input type="text" id="serialExt" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="macposExt" class="small">Mac-Pos</label>
-                                    <input type="text" id="macposExt" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="grupoCaptura" class="small">Grupo captura</label>
-                                    <input type="text" id="grupoCaptura" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="statusExt" class="small">Status</label>
-                                    <input type="text" id="statusExt" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="limExt" class="small">L.I.M</label>
-                                    <input type="text" id="limExt" class="form-control" placeholder="">
+                                    <label for="serial" class="small">Estado</label>
+                                    <div class="estado"></div>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +78,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger btn-cancel" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-warning btn-save-extension">Guardar</button>
+            <button type="button" class="btn btn-warning btn-save">Guardar</button>
         </div>
         </div>
     </div>
