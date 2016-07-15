@@ -52,12 +52,14 @@ contacts.views.empleadoForm = Backbone.View.extend({
     render: function() {
         this.$el.html(this.template())
         this.$("#formEmpleado").modal({backdrop: 'static'})
-        contacts.utils.loadSelectBL(0, "enable", this.$(".estado"))
-        contacts.utils.loadSelectDepartamento(0, "enable", this.$(".departamento"))
+        contacts.utils.loadSelectBL(0, "enable", this.$("#estado"))
+        contacts.utils.loadSelectDepartamento(0, "enable", this.$("#departamento"))
         this.$("#fecha_nac").datepicker({
             dateFormat: 'yy-mm-dd',
             autoSize: true,
         })
+        /*Vista de datos de contacto*/
+        contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: this.$(".datosContacto") })
         return this
     },
 
