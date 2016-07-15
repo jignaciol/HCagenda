@@ -1,16 +1,22 @@
 <div class="row">
-    <div class="col col-md-6 empleado">
-        <select id="empleado" class="form-control"></select>
+    <div class="col col-md-6">
+        <span class="control-label small">Descripci&oacute;n</label>
     </div>
-    <div class="col col-md-2 extension">
-        <select id="extension" class="form-control"></select>
+    <div class="col col-md-4">
+        <span class="control-label small">Tipo contacto</span>
     </div>
-    <div class="col col-md-2 estado">
-        <select id="estado" class="form-control"></select>
+    <div class="col col-md-2"></div>
+</div>
+<div class="row">
+    <div class="col col-md-6 descripcion">
+        <input id="descripcion" type="text" class="form-control" placeholder="Ej, correo@dominio.com Ej, 04125894423">
+    </div>
+    <div class="col col-md-4">
+        <div id="tipoDatoContacto" class="tipoDatoContacto"></div>
     </div>
     <div class="col col-md-2">
-        <button id="boton" type="button" class="btn btn-labeled btn-success btn-asignar">
-            <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Asignar
+        <button id="boton" type="button" class="btn btn-labeled btn-success btn-addDatoContacto">
+            <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Agregar
         </button>
     </div>
 </div>

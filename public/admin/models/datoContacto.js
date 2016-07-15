@@ -8,7 +8,8 @@ contacts.models.datoContacto = Backbone.Model.extend({
         descripcion: "",
         fech_ing: "",
         id_empleado: 0,
-        id_tipo_contacto: 0
+        id_tipo_contacto: 0,
+        tipoContacto: ""
     }
 
 })

@@ -16,13 +16,6 @@ DSN = DSN.format(BDP_IP, BDP_PORT, BDP_DBNAME, BDP_USER, BDP_PASSWORD)
 
 SERVER = bottle.app()
 
-# En caso de recibir un json a traves de post :: utilizar request.json :P
-
-# ruta de acceso para archivos estaticos
-
-# herramientas
-
-
 b = cork_server.populate_backendPSQL()
 corkServer = cork_server.Cork(backend=b, email_sender="", smtp_url="")
 

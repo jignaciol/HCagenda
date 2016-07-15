@@ -6,7 +6,10 @@ contacts.views.datoContactoCrud = Backbone.View.extend({
 
     render: function() {
         this.$el.html(this.template())
-        // coleccion de datos de contacto filtrada por usuario
+        this.collection = new contacts.collections.listaDatoContacto()
+        contacts.app.datoContactoForm = new contacts.views.datoContactoForm({ el: this.$(".formBody"), collection: this.collection })
+        contacts.app.datoContactoList = new contacts.views.datoContactoList({ el: this.$("#listBody"), collection: this.collection })
+        console.log(this.model)
         return this
     },
 

@@ -115,3 +115,23 @@ contacts.utils.loadSelectEmpleado = function(seleccionado, status, objetivo) {
     })
 
 }
+
+
+contacts.utils.loadSelectTipoDatoContacto = function(seleccionado, status, objetivo) {
+
+    listaTipoDatoContacto = new contacts.collections.listaTipoDatoContacto()
+
+    listaTipoDatoContacto.fetch().done(function(lista){
+        html_select = "<select class='form-control select-tipoDatoContacto' " + status + ">"
+        lista.forEach(function(tipoDatoContacto){
+            if(seleccionado == tipoDatoContacto["id"]){
+                html_select += "<option value=" + tipoDatoContacto["id"] + " selected='selected' >" + tipoDatoContacto["descripcion"] + "</option>"
+            } else {
+                html_select += "<option value=" + tipoDatoContacto["id"] + ">" + tipoDatoContacto["descripcion"] + "</option>"
+            }
+        })
+        html_select += "</select>"
+        $(objetivo).html(html_select)
+    })
+
+}

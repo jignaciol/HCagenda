@@ -43,10 +43,15 @@ contacts.views.empleadoForm = Backbone.View.extend({
             empleado.set({id: id})
             self.collection.add(empleado)
         })
-
+        console.log(empleado.get("id"))
+        //if (empleado.get("id") > 0) {
+            contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: self.$(".datosContacto"), model: empleado})
+        //}
+        /*
         this.$("#formEmpleado").modal("hide")
         this.$(".modal-backdrop").remove()
         this.dispose()
+       */
     },
 
     render: function() {
@@ -57,9 +62,13 @@ contacts.views.empleadoForm = Backbone.View.extend({
         this.$("#fecha_nac").datepicker({
             dateFormat: 'yy-mm-dd',
             autoSize: true,
+            changeYear: true,
+            yearRange: "1930:2010",
         })
+
+        /* contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: this.$(".datosContacto") }) */
+
         /*Vista de datos de contacto*/
-        contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: this.$(".datosContacto") })
         return this
     },
 
