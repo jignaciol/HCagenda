@@ -6,7 +6,8 @@ contacts.views.empleadoForm = Backbone.View.extend({
 
     events: {
         "click .btn-save": "addEmpleado",
-        "click .btn-cancel": "cancel"
+        "click .btn-cancel": "cancel",
+        "click .btn-close": "close"
     },
 
     cancel: function() {
@@ -19,6 +20,10 @@ contacts.views.empleadoForm = Backbone.View.extend({
        this.undelegateEvents()
        this.off()
        this.$el.removeData().unbind()
+    },
+
+    close: function() {
+
     },
 
     addEmpleado: function() {
@@ -38,15 +43,19 @@ contacts.views.empleadoForm = Backbone.View.extend({
             bl: this.$(".select-bl").val()
         })
 
-        empleado.save().done(function(response){
-            id = response["id"]
-            empleado.set({id: id})
-            self.collection.add(empleado)
+        empleado.save()
+            .done(function(response){
+                self.$(".btn-cancel").toggle("slow")
+                self.$(".btn-save").toggle("slow")
+                self.$(".btn-close").toggle("slow")
+
+                contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: self.$(".datosContacto"), model: empleado})
+
+                id = response["id"]
+                empleado.set({id: id})
+                self.collection.add(empleado)
         })
-        console.log(empleado.get("id"))
-        //if (empleado.get("id") > 0) {
-            contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: self.$(".datosContacto"), model: empleado})
-        //}
+
         /*
         this.$("#formEmpleado").modal("hide")
         this.$(".modal-backdrop").remove()

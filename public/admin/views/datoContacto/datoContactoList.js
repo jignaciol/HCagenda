@@ -3,7 +3,7 @@ var contacts = contacts || {}
 contacts.views.datoContactoList = Backbone.View.extend({
 
     renderDatoContacto: function(datoContacto) {
-        var datoContacto = new contacts.views.datoContactoReg({
+        var datoContactoReg = new contacts.views.datoContactoReg({
             model: datoContacto
         })
         this.$el.append(datoContactoReg.render().el)

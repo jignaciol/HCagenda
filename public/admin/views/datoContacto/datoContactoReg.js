@@ -7,12 +7,12 @@ contacts.views.datoContactoReg = Backbone.View.extend({
     className: "small",
 
     events: {
-        "click .btn-edit": "edit",
-        "click .btn-delete": "delete"
+        "click .btn-delete": "delete",
+        "click .btn-edit-dc": "edit"
     },
 
     edit: function() {
-
+        console.log("presionado boton editar datocontacto")
     },
 
     delete: function() {

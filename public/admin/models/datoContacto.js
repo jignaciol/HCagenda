@@ -6,10 +6,10 @@ contacts.models.datoContacto = Backbone.Model.extend({
 
     defaults: {
         descripcion: "",
-        fech_ing: "",
+        fecha_ing: "",
         id_empleado: 0,
         id_tipo_contacto: 0,
-        tipoContacto: ""
+        tipocontacto: ""
     }
 
 })

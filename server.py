@@ -251,7 +251,7 @@ def agregar_empleado():
               """.format(new_id, ficha, voe, cedula, nombre, apellido, indicador, fecha_nac, today, id_departamento, bl)
 
         cur.execute(sql)
-        # conn.commit()
+        conn.commit()
         cur.close()
         conn.close()
 
@@ -730,13 +730,16 @@ def listar_datosContacto():
         cur = conn.cursor()
 
         sql = """
-                  SELECT dc.id,
-                         dc.descripcion,
-                         to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
-                         dc.id_empleado,
-                         dc.id_tipo_contacto
-                  FROM "Agenda"."datosContacto" dc;
-              """.format(id)
+                SELECT dc.id,
+                    dc.descripcion,
+                    to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                    dc.id_empleado,
+                    tdc.id as id_tipo_contacto,
+                    tdc.descripcion as tipocontacto
+                FROM "Agenda"."datosContacto" dc
+                LEFT JOIN "Agenda"."tipoDatoContacto" tdc ON tdc.id = dc.id_tipo_contacto;
+        """
+
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -758,15 +761,18 @@ def listar_datoscontacto_id(id=0):
         cur = conn.cursor()
 
         sql = """
-                   SELECT dc.id,
-                          dc.descripcion,
-                          to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
-                          dc.id_empleado,
-                          dc.id_tipo_contacto
-                   FROM "Agenda"."datosContacto" dc
-                   WHERE dc.id={0}
-                   ORDER BY dc.id asc;
+                SELECT dc.id,
+                    dc.descripcion,
+                    to_char(dc.fec_ing, 'DD-MM-YYYY') as fec_ing,
+                    dc.id_empleado,
+                    tdc.id as id_tipo_contacto,
+                    tdc.descripcion as tipocontacto
+                FROM "Agenda"."datosContacto" dc
+                LEFT JOIN "Agenda"."tipoDatoContacto" tdc ON tdc.id = dc.id_tipo_contacto;
+                WHERE dc.id={0}
+                ORDER BY dc.id asc;
               """.format(id)
+
         cur.execute(sql)
         records = cur.fetchall()
         cur.close()
@@ -779,7 +785,7 @@ def listar_datoscontacto_id(id=0):
     return json_result
 
 
-@bottle.route("/api/datoscontacto/", method="POST")
+@bottle.route("/api/datocontacto", method="POST")
 def agregar_datoscontacto():
     """ funcion para agregar una extension a la base de datos """
     corkServer.require(fail_redirect="/")
@@ -822,7 +828,7 @@ def agregar_datoscontacto():
     return response
 
 
-@bottle.route("/api/datoscontacto/:id", method="PUT")
+@bottle.route("/api/datocontacto/:id", method="PUT")
 def actualizar_datoscontacto(id=0):
     """ funcion para actualizar los datos de una extension en la base de datos """
     corkServer.require(fail_redirect="/")
@@ -864,7 +870,7 @@ def actualizar_datoscontacto(id=0):
     return response
 
 
-@bottle.route("/api/datoscontacto/:id", method="DELETE")
+@bottle.route("/api/datocontacto/:id", method="DELETE")
 def borrar_datoscontacto(id=0):
     """ funcion para borrar una extension en la base de datos """
     corkServer.require(fail_redirect="/")
