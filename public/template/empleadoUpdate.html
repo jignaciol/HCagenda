@@ -1,0 +1,91 @@
+<div class="show">
+    <div class="modal fade " id="modalFormEmpleado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title"><i class="glyphicon glyphicon-phone-alt"></i>  Agregar empleado</h4>
+        </div>
+        <div class="modal-body">
+                <form>
+                        <div class="row">
+                        	<div class="col-sm-3">
+                        		<div class="form-group">
+				                    <label for="departamento" class="small">Ficha</label>
+                                    <input type="text" class="form-control" id="ficha" placeholder="Ej. 11458" value="<%= ficha  %>">
+				                </div>
+                        	</div>
+                            <div class="col-sm-3">
+                            	<div class="form-group">
+                            		<label for="nacionalidad" class="small">Nacionalidad</label>
+		                            <select id="nacionalidad" class="form-control">
+		                            	<option value="V">Venezolano</option>
+		                            	<option value="E">Extranjero</option>
+		                            </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                            	<div class="form-group">
+                            		<label for="cedula" class="small">Cedula</label>
+                                    <input id="cedula" type="text" placeholder="Ej. 14632123" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nombre" class="small">Nombre</label>
+                                    <input type="text" id="nombre" class="form-control" placeholder="Ej. Alfonso José">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="apellido" class="small">Apellido</label>
+                                    <input type="text" id="apellido" class="form-control" placeholder="Ej. Castillo Plaza">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="indicador" class="small">Indicador</label>
+                                    <input type="text" id="indicador" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="fecha_nac" class="small">Nacimiento</label>
+                                    <input type="text" id="fecha_nac" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="departamento" class="small">Departamento</label>
+                                    <div id="departamento"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="estado" class="small">Estado</label>
+                                    <div id="estado"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row containerdc">
+                            <div class="col-sm-12">
+                                <div class="datosContacto"></div>
+                            </div>
+                        </div>
+                    </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-cancel" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-warning btn-save">Guardar</button>
+            <button type="button" class="btn btn-primary btn-close oculto">Cerrar</button>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>

@@ -135,3 +135,4 @@ contacts.utils.loadSelectTipoDatoContacto = function(seleccionado, status, objet
     })
 
 }
+

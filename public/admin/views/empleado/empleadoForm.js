@@ -23,14 +23,14 @@ contacts.views.empleadoForm = Backbone.View.extend({
     },
 
     close: function() {
-
+        this.$("#formEmpleado").modal("hide")
+        this.$(".modal-backdrop").remove()
+        this.dispose()
     },
 
     addEmpleado: function() {
         self = this
-
-        empleado = new contacts.models.empleado()
-        empleado.set({
+        this.model.set({
             ficha: this.$("#ficha").val(),
             voe: this.$("#nacionalidad").val(),
             cedula: this.$("#cedula").val(),
@@ -43,24 +43,25 @@ contacts.views.empleadoForm = Backbone.View.extend({
             bl: this.$(".select-bl").val()
         })
 
-        empleado.save()
-            .done(function(response){
-                self.$(".btn-cancel").toggle("slow")
-                self.$(".btn-save").toggle("slow")
-                self.$(".btn-close").toggle("slow")
+        this.model.save().done(function(response){
+            self.$(".btn-cancel").toggle("slow")
+            self.$(".btn-save").toggle("slow")
+            self.$(".btn-close").toggle("slow")
 
-                contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: self.$(".datosContacto"), model: empleado})
+            self.$('#ficha').prop('disabled', true)
+            self.$('#nacionalidad').prop('disabled', true)
+            self.$('#cedula').prop('disabled', true)
+            self.$('#nombre').prop('disabled', true)
+            self.$('#apellido').prop('disabled', true)
+            self.$('#indicador').prop('disabled', true)
+            self.$('#fecha_nac').prop('disabled', true)
+            self.$('.select-departamento').prop('disabled', true)
+            self.$('.select-bl').prop('disabled', true)
 
-                id = response["id"]
-                empleado.set({id: id})
-                self.collection.add(empleado)
+            id = response["id"]
+            self.model.set({id: id})
+            self.collection.add(self.model)
         })
-
-        /*
-        this.$("#formEmpleado").modal("hide")
-        this.$(".modal-backdrop").remove()
-        this.dispose()
-       */
     },
 
     render: function() {
@@ -69,19 +70,27 @@ contacts.views.empleadoForm = Backbone.View.extend({
         contacts.utils.loadSelectBL(0, "enable", this.$("#estado"))
         contacts.utils.loadSelectDepartamento(0, "enable", this.$("#departamento"))
         this.$("#fecha_nac").datepicker({
-            dateFormat: 'yy-mm-dd',
-            autoSize: true,
-            changeYear: true,
-            yearRange: "1930:2010",
+            dateFormat: "yy/mm/dd",
+            dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+            dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+            firstDay: 1,
+            gotoCurrent: true,
+            monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ]
         })
-
-        /* contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({ el: this.$(".datosContacto") }) */
-
-        /*Vista de datos de contacto*/
         return this
     },
 
+    addDatoContacto: function() {
+        contacts.app.datoContactoCrud = new contacts.views.datoContactoCrud({
+            el: this.$(".datosContacto"),
+            model: this.model,
+            collection: this.collection
+        })
+        contacts.app.datoContactoCrud.showData()
+    },
+
     initialize: function() {
+        this.collection.on('add', this.addDatoContacto, this)
         this.render()
     }
 

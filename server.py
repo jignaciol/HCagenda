@@ -344,6 +344,162 @@ def borrar_empleado(id=0):
 
     return response
 
+# CODIGO PARA MODELO NACIONALIDAD #
+
+
+@bottle.route("/api/nacionalidad", method="GET")
+def listar_nacionalidad():
+    """ funcion para listar todas las areas """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT id_nacionalidad, descripcion, bl, codigo FROM "Agenda".nacionalidad;
+              """
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("/api/nacionalidad/:id", method="GET")
+def listar_nacionalidad_id(id):
+    """ funcion para listar un area segun el id enviado """
+    corkServer.require(fail_redirect="/")
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """
+                SELECT id_nacionalidad, descripcion, bl, codigo
+                FROM "Agenda".nacionalidad
+                WHERE id_nacionalidad = {0}
+              """.format(id)
+
+        cur.execute(sql)
+        records = cur.fetchall()
+        cur.close()
+    except psycopg2.Error as error:
+        print 'ERROR: no se pudo realizar la conexion: ', error
+
+    cabecera = [col[0] for col in cur.description]
+    json_result = json.dumps([dict(zip(cabecera, rec)) for rec in records])
+
+    return json_result
+
+
+@bottle.route("/api/nacionalidad", method="POST")
+def agregar_nacionalidad():
+    """ funcion para agregar un empleado a la base de datos """
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": "", "id": 0}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data['descripcion']
+    bl = data['bl']
+    codigo = data['codigo']
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql_next_val = """ SELECT nextval(pg_get_serial_sequence('"Agenda".nacionalidad', 'id')) as new_id; """
+
+        cur.execute(sql_next_val)
+        records = cur.fetchall()
+        new_id = records[0][0]
+        sql = """ INSERT INTO "Agenda".nacionalidad(id, descripcion, bl, codigo)
+                     VALUES ({0}, '{1}', {2}, '{3}');
+              """.format(new_id, descripcion, bl, codigo)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response['OK'] = True
+        response['id'] = new_id
+    except psycopg2.Error as error:
+        response['OK'] = False
+        response['msg'] = 'error al insertar el registro a la base de datos'
+        print 'ERROR: no se pudo insertar el registo ', error
+
+    return response
+
+
+@bottle.route("/api/nacionalidad", method="PUT")
+def actualizar_nacionalidad(id=0):
+    """ funcion para actualizar los datos de un area en la base de datos """
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    try:
+        data = json_result()
+    except ValueError:
+        print "error capturando json"
+
+    descripcion = data["descripcion"]
+    bl = data["bl"]
+    codigo = data["codigo"]
+
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ UPDATE "Agenda"."Area"
+                  SET bl = {0}, descripcion = '{1}', codigo = '{2}'
+                  WHERE id = {3};""".format(bl, descripcion, codigo, id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = 'error al intentar actualizar el registro en la base de datos'
+        print 'ERROR: no se pudo actualizar el registo ', error
+
+    return response
+
+
+@bottle.route("/api/nacionalidad", method="DELETE")
+def borrar_nacionalidad(id=0):
+    """ funcion para borrar un empleado en la base de datos """
+    corkServer.require(fail_redirect="/")
+    response = {"OK": False, "msg": ""}
+    id = json_result()
+    try:
+        conn = psycopg2.connect(DSN)
+        cur = conn.cursor()
+
+        sql = """ DELETE FROM "Agenda".nacionalidad WHERE id = {0};""".format(id)
+
+        cur.execute(sql)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        response["OK"] = True
+    except psycopg2.Error as error:
+        response["OK"] = False
+        response["msg"] = "error al intentar borrar el registro en la base de datos"
+        print "ERROR: no se pudo borrar el registo -->", error
+
+    return response
+
+
 # CODIGO PARA MODELO AREA #
 
 
@@ -839,23 +995,19 @@ def actualizar_datoscontacto(id=0):
         print "error capturando json"
 
     descripcion = data["descripcion"].encode('utf-8')
-    bl = data["bl"]
-    id_ubicacion = data["id_ubicacion"]
-    id_piso = data["id_piso"]
-    alias = data["alias"]
-    # id = data["id"]
+    id_empleado = data["id_empleado"]
+    id_tipo_contacto = data["id_tipo_contacto"]
     try:
         conn = psycopg2.connect(DSN)
         cur = conn.cursor()
 
         sql = """
                   UPDATE "Agenda"."datosContacto" dc
-                  SET descripcion={0},
-                       fec_ing={1},
-                       id_empleado={2},
-                       id_tipo_contacto={3}
-                  WHERE dc.id={4};
-               """.format(descripcion, bl, id_ubicacion, id_piso, alias, id)
+                  SET  descripcion='{0}',
+                       id_empleado={1},
+                       id_tipo_contacto={2}
+                  WHERE dc.id={3};
+               """.format(descripcion, id_empleado, id_tipo_contacto, id)
         cur.execute(sql)
         conn.commit()
         cur.close()

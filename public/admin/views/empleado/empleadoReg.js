@@ -12,7 +12,7 @@ contacts.views.empleadoReg = Backbone.View.extend({
     },
 
     edit: function() {
-
+        contacts.app.formEmpleadoUpdate = new contacts.views.empleadoUpdate({ el: $("#formEmpleado"), collection: this.collection, model: this.model })
     },
 
     delete: function() {

@@ -6,13 +6,13 @@ contacts.views.datoContactoReg = Backbone.View.extend({
 
     className: "small",
 
-    events: {
-        "click .btn-delete": "delete",
-        "click .btn-edit-dc": "edit"
-    },
+    template: _.template( contacts.utils.loadHtmlTemplate("datosContactoReg") ),
 
-    edit: function() {
-        console.log("presionado boton editar datocontacto")
+    events: {
+        'click .btn-delete': 'delete',
+        'click .btn-edit': 'edit',
+        'click .btn-cancel': 'cancel',
+        'click .btn-update': 'update'
     },
 
     delete: function() {
@@ -21,9 +21,46 @@ contacts.views.datoContactoReg = Backbone.View.extend({
             contentType: "application/json"
         })
         this.render()
+        return false
     },
 
-    template: _.template( contacts.utils.loadHtmlTemplate("datosContactoReg") ),
+    edit: function() {
+        this.$(".btn-edit").hide()
+        this.$(".btn-delete").hide()
+        this.$(".btn-update").show()
+        this.$(".btn-cancel").show()
+
+        var descripcion = this.$('.descripcion').html()
+
+        objetivo = this.$(".tipocontacto")
+        tipoDatoContacto = this.model.get("id_tipo_contacto")
+        contacts.utils.loadSelectTipoDatoContacto(tipoDatoContacto, "enable", objetivo)
+
+        this.$('.descripcion').html('<input type="text" class="form-control descripcion-update small" value="' + descripcion + '">')
+
+        return false
+    },
+
+    update: function() {
+        self = this
+        this.model.set({
+            descripcion: this.$(".descripcion-update").val(),
+            id_tipo_contacto: this.$(".select-tipoDatoContacto").val(),
+            tipocontacto: this.$(".select-tipoDatoContacto option:selected").html()
+        })
+
+        this.model.save({
+            success: function() {
+                self.render()
+            }
+        })
+        return false
+    },
+
+    cancel: function() {
+        this.render()
+        return false
+    },
 
     render: function() {
         this.$el.html( this.template( this.model.toJSON() ))

@@ -5,12 +5,15 @@ contacts.views.datoContactoForm = Backbone.View.extend({
     template: _.template( contacts.utils.loadHtmlTemplate("datosContactoForm") ),
 
     events: {
-        "click .btn-addDatoContacto": "addDatoContacto"
+        "click .btn-addDatoContacto": "add"
     },
 
-    addDatoContacto: function() {
+
+    add: function() {
+        console.log("agregando dato de contacto")
+        var datoContacto = new contacts.models.datoContacto()
         self = this
-        datoContacto = new contacts.models.datoContacto()
+        datoContacto.on('sync', this.addToList, this)
         datoContacto.set({
             id_empleado: this.model.get("id"),
             descripcion: this.$("#descripcion").val(),
@@ -22,10 +25,10 @@ contacts.views.datoContactoForm = Backbone.View.extend({
         datoContacto.save().done(function(response){
             id = response["id"]
             datoContacto.set({id: id})
+            console.log(datoContacto)
+
             self.collection.add(datoContacto)
         })
-
-        console.log(datoContacto)
     },
 
     render: function() {
